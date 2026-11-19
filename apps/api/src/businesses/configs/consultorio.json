@@ -1,0 +1,90 @@
+{
+  "id": "consultorio",
+  "name": "Consultorio Médico Integral",
+  "description": "Consultorio de clínica médica con turnos presenciales y teleconsultas. Atiende con obras sociales y de forma particular.",
+  "priorityRules": "Urgente: síntomas graves, riesgo para la salud o la vida, o una crisis. Alta: el turno es en las próximas 48 horas o falta medicación de uso diario. Normal: gestión de turnos, resultados y trámites. Baja: consultas generales sin plazo.",
+  "categories": [
+    {
+      "id": "new-appointment",
+      "label": "Pedir turno",
+      "description": "La persona quiere sacar un turno nuevo.",
+      "examples": [
+        "Hola, quería un turno con clínica médica para la semana que viene."
+      ],
+      "extract": [
+        { "key": "patientName", "description": "Nombre del paciente" },
+        {
+          "key": "preferredDate",
+          "description": "Fecha u horario preferido, tal como lo escribió"
+        },
+        {
+          "key": "insurance",
+          "description": "Obra social o prepaga, si la menciona"
+        }
+      ]
+    },
+    {
+      "id": "reschedule-appointment",
+      "label": "Reprogramar turno",
+      "description": "La persona tiene un turno y quiere moverlo a otra fecha u horario.",
+      "examples": ["Necesito cambiar mi turno del jueves al viernes."],
+      "extract": [
+        { "key": "currentDate", "description": "Fecha del turno actual" },
+        {
+          "key": "preferredDate",
+          "description": "Nueva fecha u horario preferido"
+        }
+      ]
+    },
+    {
+      "id": "cancel-appointment",
+      "label": "Cancelar turno",
+      "description": "La persona quiere cancelar un turno sin reprogramarlo.",
+      "examples": ["No voy a poder ir mañana, cancelen mi turno por favor."],
+      "extract": [
+        { "key": "currentDate", "description": "Fecha del turno a cancelar" }
+      ]
+    },
+    {
+      "id": "test-results",
+      "label": "Resultados y recetas",
+      "description": "Consultas por resultados de estudios, recetas o certificados médicos.",
+      "examples": [
+        "¿Ya están los resultados del análisis de sangre que me hice el lunes?"
+      ],
+      "extract": [
+        {
+          "key": "document",
+          "description": "Estudio, receta o certificado que pide"
+        }
+      ]
+    },
+    {
+      "id": "billing",
+      "label": "Pagos y obra social",
+      "description": "Preguntas sobre costos, coberturas, facturas u obras sociales.",
+      "examples": [
+        "¿Atienden con OSDE 310? ¿Cuánto sale la consulta particular?"
+      ],
+      "extract": [
+        {
+          "key": "insurance",
+          "description": "Obra social o prepaga mencionada"
+        }
+      ]
+    },
+    {
+      "id": "crisis",
+      "label": "Crisis o urgencia médica",
+      "description": "Síntomas graves, riesgo para la vida o una crisis emocional. Nunca se responde automáticamente.",
+      "examples": ["Tengo un dolor muy fuerte en el pecho y me falta el aire."],
+      "escalate": true
+    },
+    {
+      "id": "general",
+      "label": "Consulta general",
+      "description": "Horarios, dirección, especialidades u otras preguntas que no encajan en otra categoría.",
+      "examples": ["¿Qué horario tienen los sábados?"]
+    }
+  ]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "academia",
+  "name": "Academia Universitaria del Sur",
+  "description": "Instituto que ofrece carreras de grado, cursos de ingreso y diplomaturas, con cursada presencial y virtual.",
+  "priorityRules": "Urgente: amenazas, acoso o una situación de riesgo para un estudiante. Alta: un trámite o inscripción vence en las próximas 72 horas, o un examen está en juego. Normal: inscripciones, pagos y trámites con plazo holgado. Baja: consultas informativas.",
+  "categories": [
+    {
+      "id": "enrollment",
+      "label": "Inscripción",
+      "description": "Inscripción a carreras, materias, cursos de ingreso o diplomaturas.",
+      "examples": [
+        "¿Hasta cuándo puedo inscribirme al curso de ingreso de Ingeniería?"
+      ],
+      "extract": [
+        {
+          "key": "program",
+          "description": "Carrera, materia o curso de interés"
+        },
+        {
+          "key": "studentId",
+          "description": "Legajo o DNI del estudiante, si lo menciona"
+        }
+      ]
+    },
+    {
+      "id": "exams-grades",
+      "label": "Exámenes y notas",
+      "description": "Fechas de examen, inscripción a finales, notas o revisiones.",
+      "examples": [
+        "No me aparece la nota del parcial de Análisis Matemático II."
+      ],
+      "extract": [
+        { "key": "course", "description": "Materia mencionada" },
+        { "key": "examDate", "description": "Fecha de examen mencionada" },
+        {
+          "key": "studentId",
+          "description": "Legajo o DNI del estudiante, si lo menciona"
+        }
+      ]
+    },
+    {
+      "id": "fees",
+      "label": "Pagos y becas",
+      "description": "Cuotas, matrícula, facturación, deudas o becas.",
+      "examples": ["Pagué la cuota de marzo pero me figura como impaga."],
+      "extract": [
+        { "key": "period", "description": "Mes o período de la cuota" },
+        {
+          "key": "studentId",
+          "description": "Legajo o DNI del estudiante, si lo menciona"
+        }
+      ]
+    },
+    {
+      "id": "certificates",
+      "label": "Certificados y trámites",
+      "description": "Constancias de alumno regular, analíticos, títulos o equivalencias.",
+      "examples": [
+        "Necesito una constancia de alumno regular para el trabajo."
+      ],
+      "extract": [
+        { "key": "document", "description": "Certificado o trámite que pide" }
+      ]
+    },
+    {
+      "id": "wellbeing-risk",
+      "label": "Situación de riesgo",
+      "description": "Acoso, amenazas, violencia o una crisis personal de un estudiante. Nunca se responde automáticamente.",
+      "examples": [
+        "Un compañero me está amenazando por mensajes y tengo miedo de ir a clase."
+      ],
+      "escalate": true
+    },
+    {
+      "id": "general",
+      "label": "Consulta general",
+      "description": "Horarios, sedes, modalidad de cursada u otras preguntas que no encajan en otra categoría.",
+      "examples": ["¿La diplomatura en Datos es virtual o presencial?"]
+    }
+  ]
+}

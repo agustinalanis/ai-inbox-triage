@@ -23,6 +23,21 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
+  it('/businesses (GET) lists the businesses without prompt details', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/businesses')
+      .expect(200);
+
+    expect(
+      response.body.map((business: { id: string }) => business.id),
+    ).toEqual(['consultorio', 'academia']);
+    expect(response.body[0].categories[0]).toEqual({
+      id: 'new-appointment',
+      label: 'Pedir turno',
+    });
+    expect(JSON.stringify(response.body)).not.toContain('priorityRules');
+  });
+
   afterEach(async () => {
     await app.close();
   });

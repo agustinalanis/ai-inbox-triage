@@ -64,6 +64,7 @@ export class MessagesService {
           id: seedMessageId(sessionId, key),
           sessionId,
           latencyMs: 0,
+          isExample: true,
           createdAt: new Date(now - minutesAgo * 60_000),
         }),
       ),

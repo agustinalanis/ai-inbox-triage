@@ -32,6 +32,8 @@ model Message {
   /// null for the fallback classification.
   model          String?
   latencyMs      Int
+  /// Seeded sample message, shown apart from the ones the visitor sent.
+  isExample      Boolean  @default(false)
   createdAt      DateTime @default(now())
 
   @@index([sessionId, businessId, createdAt])

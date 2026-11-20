@@ -83,6 +83,7 @@ describe('Messages (e2e)', () => {
       senderEmail: 'laura@example.com',
       category: 'general',
       model: 'fake-model',
+      isExample: false,
     });
     expect(response.body).not.toHaveProperty('sessionId');
 
@@ -124,6 +125,9 @@ describe('Messages (e2e)', () => {
 
     const inbox = await list(session).expect(200);
     expect(inbox.body).toHaveLength(SEED_COUNT);
+    expect(inbox.body.every((m: { isExample: boolean }) => m.isExample)).toBe(
+      true,
+    );
     expect(fakeClassifier.classify).not.toHaveBeenCalledWith(
       SEED_MESSAGES[0].text,
       expect.anything(),

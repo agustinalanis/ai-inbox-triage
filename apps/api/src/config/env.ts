@@ -9,6 +9,11 @@ export const envSchema = z.object({
     .trim()
     .min(1)
     .default('gemini-3.1-flash-lite'),
+  DATABASE_URL: z.url(),
+  // The only origin allowed by CORS: the web app.
+  WEB_ORIGIN: z.url().default('http://localhost:5173'),
+  // Messages classified per UTC day across all sessions, to stay inside the Gemini free tier.
+  DAILY_MESSAGE_LIMIT: z.coerce.number().int().positive().default(300),
 });
 
 export type Env = z.infer<typeof envSchema>;

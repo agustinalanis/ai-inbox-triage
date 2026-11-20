@@ -1,10 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, StandardSchemaValidationPipe } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
+import { APP_PIPE } from '@nestjs/core';
+import { ThrottlerModule } from '@nestjs/throttler';
 import { BusinessesModule } from './businesses/businesses.module.js';
-import { ClassifierModule } from './classifier/classifier.module.js';
 import { envSchema } from './config/env.js';
+import { MessagesModule } from './messages/messages.module.js';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 @Module({
   imports: [
@@ -14,10 +15,13 @@ import { envSchema } from './config/env.js';
       envFilePath: '../../.env',
       validationSchema: envSchema,
     }),
+    // Applied only where a route opts in with ThrottlerGuard.
+    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 5 }]),
+    PrismaModule,
     BusinessesModule,
-    ClassifierModule,
+    MessagesModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  // Validates every parameter declared with a `schema` (zod).
+  providers: [{ provide: APP_PIPE, useClass: StandardSchemaValidationPipe }],
 })
 export class AppModule {}

@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Declaration order is the sort order in Postgres: the inbox sorts by it.
+enum Priority {
+  low
+  normal
+  high
+  urgent
+}
+
+model Message {
+  id             String   @id @default(uuid()) @db.Uuid
+  sessionId      String   @db.Uuid
+  businessId     String
+  senderName     String?
+  senderEmail    String?
+  text           String
+  /// null when the classifier fell back and a person must review the message.
+  category       String?
+  priority       Priority
+  extracted      Json
+  suggestedReply String?
+  needsHuman     Boolean
+  confidence     Float
+  /// null for the fallback classification.
+  model          String?
+  latencyMs      Int
+  createdAt      DateTime @default(now())
+
+  @@index([sessionId, businessId, createdAt])
+}
+
+/// Global count of classified messages per UTC day, to cap the Gemini usage of the demo.
+model DailyUsage {
+  day   DateTime @id @db.Date
+  count Int
+}

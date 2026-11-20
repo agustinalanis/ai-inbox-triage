@@ -156,6 +156,25 @@ describe('ClassifierService', () => {
     });
   });
 
+  it('uses only the pinned model, without the backup, when one is given', async () => {
+    const { classifier, primary, backup } = await setup(
+      [{ object: validAnswer }],
+      [{ object: validAnswer }],
+    );
+    const pinned = new FakeModel([providerError(503)], {
+      modelId: 'pinned-model',
+    });
+
+    const result = await classifier.classify('Hola', consultorio, {
+      model: pinned,
+    });
+
+    expect(result).toMatchObject({ category: null, model: null });
+    expect(pinned.calls).toHaveLength(1);
+    expect(primary.calls).toHaveLength(0);
+    expect(backup.calls).toHaveLength(0);
+  });
+
   it('falls back to a human when every model fails', async () => {
     const { classifier } = await setup(
       [providerError(503)],

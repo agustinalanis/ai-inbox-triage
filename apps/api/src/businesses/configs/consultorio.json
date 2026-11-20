@@ -46,6 +46,18 @@
       ]
     },
     {
+      "id": "confirm-appointment",
+      "label": "Confirmar turno",
+      "description": "La persona confirma que va a asistir a un turno que ya tiene asignado.",
+      "examples": ["Sí, confirmo el turno del martes a las 9. Gracias."],
+      "extract": [
+        {
+          "key": "currentDate",
+          "description": "Fecha u horario del turno que confirma"
+        }
+      ]
+    },
+    {
       "id": "test-results",
       "label": "Resultados y recetas",
       "description": "Consultas por resultados de estudios, recetas o certificados médicos.",

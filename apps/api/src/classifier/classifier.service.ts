@@ -1,5 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { AiModelError, AiOutputError, AiService } from '@nestjs/ai';
+import {
+  AiModelError,
+  AiOutputError,
+  AiService,
+  type AiModelReference,
+} from '@nestjs/ai';
+import { APICallError } from 'ai';
 import { z } from 'zod';
 import type { BusinessConfig } from '../businesses/business-config.schema.js';
 
@@ -17,6 +23,11 @@ export interface Classification {
   /** The model that answered, `null` for the fallback. */
   model: string | null;
   latencyMs: number;
+}
+
+export interface ClassifyOptions {
+  /** Pins one model with no fallback, so its failures show up (used by the evals). */
+  model?: AiModelReference;
 }
 
 // The model may only answer with this business's categories and extraction fields.
@@ -73,9 +84,14 @@ export function buildInstructions(business: BusinessConfig): string {
     `Categories:\n${categories}`,
     `Priority rules: ${business.priorityRules}`,
     'Fill "extracted" only with values stated in the message, and null for the rest.',
-    'Write "suggestedReply" in the language of the message, as the business, brief and polite. ' +
-      'Never promise dates, prices or decisions the message does not confirm. Use null when a person must answer.',
-    'Set "needsHuman" to true when the request needs a decision or information you do not have.',
+    'Write "suggestedReply" in the language of the message, as the business, brief and polite: a draft the staff reviews before sending. ' +
+      'Acknowledge the request, ask for missing data the staff will need, and say the team will follow up. ' +
+      'Never state facts about the business that are not written above (coverage, schedules, prices, locations), ' +
+      'never state that an action was done (booked, cancelled, sent, fixed) and never promise dates, prices or decisions the message does not confirm.',
+    'Set "needsHuman" to true when resolving the message needs an action by the staff (booking, changing or cancelling something, ' +
+      'sending a document, checking a record) or information not written above (availability, schedules, addresses, prices, coverage). ' +
+      'You know nothing about the business beyond this text. ' +
+      'Set it to false only when a polite reply fully resolves the message, such as thanks or a confirmation that needs no action.',
     'Set "confidence" between 0 and 1.',
   ].join('\n\n');
 }
@@ -89,6 +105,7 @@ export class ClassifierService {
   async classify(
     text: string,
     business: BusinessConfig,
+    { model: pinnedModel }: ClassifyOptions = {},
   ): Promise<Classification> {
     const startedAt = performance.now();
     const elapsed = () => Math.round(performance.now() - startedAt);
@@ -99,13 +116,18 @@ export class ClassifierService {
         schemaName: 'triage',
         instructions: buildInstructions(business),
         prompt: `<message>\n${text}\n</message>`,
+        ...(pinnedModel ? { model: pinnedModel, fallback: false } : {}),
       });
       return applyBusinessRules(object, business, model.modelId, elapsed());
     } catch (error) {
       // Invalid output, or every model failed: keep the message and hand it to a person.
       if (error instanceof AiOutputError || error instanceof AiModelError) {
+        // The provider status (429 quota, 503 overload) is safe to log and tells the failures apart.
+        const status = APICallError.isInstance(error.cause)
+          ? ` (HTTP ${error.cause.statusCode ?? 'unknown'})`
+          : '';
         this.logger.warn(
-          `Classification fell back for business "${business.id}": ${error.constructor.name}`,
+          `Classification fell back for business "${business.id}": ${error.constructor.name}${status}`,
         );
         return fallbackClassification(elapsed());
       }

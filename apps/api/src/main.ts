@@ -5,11 +5,8 @@ import type { Env } from './config/env.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.enableCors({
-    origin: app
-      .get(ConfigService<Env, true>)
-      .get('WEB_ORIGIN', { infer: true }),
-  });
-  await app.listen(process.env.PORT ?? 3000);
+  const config = app.get(ConfigService<Env, true>);
+  app.enableCors({ origin: config.get('WEB_ORIGIN', { infer: true }) });
+  await app.listen(config.get('PORT', { infer: true }));
 }
 await bootstrap();

@@ -1,19 +1,22 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
+import type { INestApplication } from '@nestjs/common';
+import { Test } from '@nestjs/testing';
 import request from 'supertest';
-import { App } from 'supertest/types.js';
-import { AppModule } from './../src/app.module.js';
+import type { App } from 'supertest/types.js';
+import { AppModule } from '../src/app.module.js';
 
 describe('Businesses (e2e)', () => {
   let app: INestApplication<App>;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
-
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  afterEach(async () => {
+    await app.close();
   });
 
   it('/businesses (GET) lists the businesses without prompt details', async () => {
@@ -39,9 +42,5 @@ describe('Businesses (e2e)', () => {
     expect(body).not.toContain('priorityRules');
     expect(body).not.toContain('examples');
     expect(body).not.toContain('description":"Nombre del paciente');
-  });
-
-  afterEach(async () => {
-    await app.close();
   });
 });

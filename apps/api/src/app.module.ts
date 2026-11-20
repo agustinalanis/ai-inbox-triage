@@ -15,7 +15,6 @@ import { PrismaModule } from './prisma/prisma.module.js';
       envFilePath: '../../.env',
       validationSchema: envSchema,
     }),
-    // Applied only where a route opts in with ThrottlerGuard.
     ThrottlerModule.forRoot({
       throttlers: [{ ttl: 60_000, limit: 5 }],
       // Shown as is by the web, like the daily limit message.
@@ -26,7 +25,6 @@ import { PrismaModule } from './prisma/prisma.module.js';
     BusinessesModule,
     MessagesModule,
   ],
-  // Validates every parameter declared with a `schema` (zod).
   providers: [{ provide: APP_PIPE, useClass: StandardSchemaValidationPipe }],
 })
 export class AppModule {}

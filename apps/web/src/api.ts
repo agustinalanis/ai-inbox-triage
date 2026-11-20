@@ -29,7 +29,6 @@ export interface Message {
   senderName: string | null;
   senderEmail: string | null;
   text: string;
-  /** null when the classifier fell back and a person must review it. */
   category: string | null;
   priority: Priority;
   extracted: Record<string, string>;
@@ -38,7 +37,6 @@ export interface Message {
   confidence: number;
   model: string | null;
   latencyMs: number;
-  /** Seeded sample, shown apart from the messages the visitor sent. */
   isExample: boolean;
   createdAt: string;
 }

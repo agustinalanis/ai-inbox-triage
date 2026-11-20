@@ -33,7 +33,6 @@ export function MessageForm({
   const [sending, setSending] = useState(false);
   const [wakingUp, setWakingUp] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  // When the visitor may send again, and the clock that counts down to it.
   const [cooldownEnd, setCooldownEnd] = useState(0);
   const [now, setNow] = useState(Date.now);
   const textRef = useRef<HTMLTextAreaElement>(null);

@@ -11,7 +11,6 @@ const categorySchema = z.object({
     .array(
       z.object({
         key: z.string().regex(/^[a-z][a-zA-Z0-9]*$/, 'must be camelCase'),
-        // Shown to the staff in the inbox, next to the extracted value.
         label: z.string().min(1),
         description: z.string().min(1),
       }),

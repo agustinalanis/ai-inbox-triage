@@ -27,8 +27,18 @@ describe('Businesses (e2e)', () => {
     expect(response.body[0].categories[0]).toEqual({
       id: 'new-appointment',
       label: 'Pedir turno',
+      fields: [
+        { key: 'patientName', label: 'Paciente' },
+        { key: 'preferredDate', label: 'Fecha preferida' },
+        { key: 'insurance', label: 'Obra social' },
+      ],
     });
-    expect(JSON.stringify(response.body)).not.toContain('priorityRules');
+    expect(response.body[0].suggestions.length).toBeGreaterThan(0);
+    const body = JSON.stringify(response.body);
+    // Prompt details stay on the server: rules, examples and field descriptions.
+    expect(body).not.toContain('priorityRules');
+    expect(body).not.toContain('examples');
+    expect(body).not.toContain('description":"Nombre del paciente');
   });
 
   afterEach(async () => {

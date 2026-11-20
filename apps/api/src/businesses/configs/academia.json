@@ -3,6 +3,12 @@
   "name": "Academia Universitaria del Sur",
   "description": "Instituto que ofrece carreras de grado, cursos de ingreso y diplomaturas, con cursada presencial y virtual.",
   "priorityRules": "Urgente: amenazas, acoso o una situación de riesgo para un estudiante. Alta: un trámite o inscripción vence en las próximas 72 horas, o un examen está en juego. Normal: inscripciones, pagos y trámites con plazo holgado. Baja: consultas informativas.",
+  "suggestions": [
+    "Hola, quiero inscribirme a la Licenciatura en Administración para el próximo cuatrimestre. ¿Qué tengo que presentar?",
+    "Rendí el final de Química el 12 y todavía no figura la nota. Mi legajo es 40871.",
+    "No me llegó la factura de la cuota de octubre, ¿me la pueden reenviar?",
+    "Necesito un certificado de alumno regular para presentar en la obra social."
+  ],
   "categories": [
     {
       "id": "enrollment",
@@ -14,10 +20,12 @@
       "extract": [
         {
           "key": "program",
+          "label": "Carrera o curso",
           "description": "Carrera, materia o curso de interés"
         },
         {
           "key": "studentId",
+          "label": "Legajo o DNI",
           "description": "Legajo o DNI del estudiante, si lo menciona"
         }
       ]
@@ -30,10 +38,19 @@
         "No me aparece la nota del parcial de Análisis Matemático II."
       ],
       "extract": [
-        { "key": "course", "description": "Materia mencionada" },
-        { "key": "examDate", "description": "Fecha de examen mencionada" },
+        {
+          "key": "course",
+          "label": "Materia",
+          "description": "Materia mencionada"
+        },
+        {
+          "key": "examDate",
+          "label": "Fecha de examen",
+          "description": "Fecha de examen mencionada"
+        },
         {
           "key": "studentId",
+          "label": "Legajo o DNI",
           "description": "Legajo o DNI del estudiante, si lo menciona"
         }
       ]
@@ -44,9 +61,14 @@
       "description": "Cuotas, matrícula, facturación, deudas o becas.",
       "examples": ["Pagué la cuota de marzo pero me figura como impaga."],
       "extract": [
-        { "key": "period", "description": "Mes o período de la cuota" },
+        {
+          "key": "period",
+          "label": "Período",
+          "description": "Mes o período de la cuota"
+        },
         {
           "key": "studentId",
+          "label": "Legajo o DNI",
           "description": "Legajo o DNI del estudiante, si lo menciona"
         }
       ]
@@ -59,7 +81,11 @@
         "Necesito una constancia de alumno regular para el trabajo."
       ],
       "extract": [
-        { "key": "document", "description": "Certificado o trámite que pide" }
+        {
+          "key": "document",
+          "label": "Trámite",
+          "description": "Certificado o trámite que pide"
+        }
       ]
     },
     {

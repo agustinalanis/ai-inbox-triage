@@ -3,6 +3,12 @@
   "name": "Consultorio Médico Integral",
   "description": "Consultorio de clínica médica con turnos presenciales y teleconsultas. Atiende con obras sociales y de forma particular.",
   "priorityRules": "Urgente: síntomas graves, riesgo para la salud o la vida, o una crisis. Alta: el turno es en las próximas 48 horas o falta medicación de uso diario. Normal: gestión de turnos, resultados y trámites. Baja: consultas generales sin plazo.",
+  "suggestions": [
+    "Hola, soy Laura Gómez. Quisiera un turno con clínica médica para el jueves a la tarde. Tengo Swiss Medical.",
+    "Tengo turno mañana a las 9 pero me surgió un viaje, ¿lo puedo pasar a la semana que viene?",
+    "Mi mamá se desmayó hace un rato y sigue muy mareada, ¿qué hacemos?",
+    "¿Ya están los resultados del análisis de sangre que me hice el lunes?"
+  ],
   "categories": [
     {
       "id": "new-appointment",
@@ -12,13 +18,19 @@
         "Hola, quería un turno con clínica médica para la semana que viene."
       ],
       "extract": [
-        { "key": "patientName", "description": "Nombre del paciente" },
+        {
+          "key": "patientName",
+          "label": "Paciente",
+          "description": "Nombre del paciente"
+        },
         {
           "key": "preferredDate",
+          "label": "Fecha preferida",
           "description": "Fecha u horario preferido, tal como lo escribió"
         },
         {
           "key": "insurance",
+          "label": "Obra social",
           "description": "Obra social o prepaga, si la menciona"
         }
       ]
@@ -29,9 +41,14 @@
       "description": "La persona tiene un turno y quiere moverlo a otra fecha u horario.",
       "examples": ["Necesito cambiar mi turno del jueves al viernes."],
       "extract": [
-        { "key": "currentDate", "description": "Fecha del turno actual" },
+        {
+          "key": "currentDate",
+          "label": "Turno",
+          "description": "Fecha del turno actual"
+        },
         {
           "key": "preferredDate",
+          "label": "Fecha preferida",
           "description": "Nueva fecha u horario preferido"
         }
       ]
@@ -42,7 +59,11 @@
       "description": "La persona quiere cancelar un turno sin reprogramarlo.",
       "examples": ["No voy a poder ir mañana, cancelen mi turno por favor."],
       "extract": [
-        { "key": "currentDate", "description": "Fecha del turno a cancelar" }
+        {
+          "key": "currentDate",
+          "label": "Turno",
+          "description": "Fecha del turno a cancelar"
+        }
       ]
     },
     {
@@ -53,6 +74,7 @@
       "extract": [
         {
           "key": "currentDate",
+          "label": "Turno",
           "description": "Fecha u horario del turno que confirma"
         }
       ]
@@ -67,6 +89,7 @@
       "extract": [
         {
           "key": "document",
+          "label": "Pedido",
           "description": "Estudio, receta o certificado que pide"
         }
       ]
@@ -81,6 +104,7 @@
       "extract": [
         {
           "key": "insurance",
+          "label": "Obra social",
           "description": "Obra social o prepaga mencionada"
         }
       ]

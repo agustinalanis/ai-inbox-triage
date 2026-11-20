@@ -68,6 +68,25 @@ describe('parseBusinessConfigs', () => {
     ).toThrow(/category ids must be unique/);
   });
 
+  it('rejects an extraction field without a label', () => {
+    const categories = [
+      {
+        ...minimalBusiness.categories[0],
+        extract: [{ key: 'orderId', description: 'Order number' }],
+      },
+    ];
+
+    expect(() =>
+      parseBusinessConfigs([{ ...minimalBusiness, categories }]),
+    ).toThrow(/label/);
+  });
+
+  it('defaults to no suggestions', () => {
+    expect(
+      parseBusinessConfigs([minimalBusiness]).get('shop')?.suggestions,
+    ).toEqual([]);
+  });
+
   it('rejects duplicate business ids', () => {
     expect(() =>
       parseBusinessConfigs([minimalBusiness, minimalBusiness]),

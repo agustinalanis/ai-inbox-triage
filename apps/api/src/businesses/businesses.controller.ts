@@ -10,13 +10,18 @@ export class BusinessesController {
   findAll() {
     return this.businessesService
       .findAll()
-      .map(({ id, name, description, categories }) => ({
+      .map(({ id, name, description, suggestions, categories }) => ({
         id,
         name,
         description,
-        categories: categories.map(({ id: categoryId, label }) => ({
+        suggestions,
+        categories: categories.map(({ id: categoryId, label, extract }) => ({
           id: categoryId,
           label,
+          fields: extract.map(({ key, label: fieldLabel }) => ({
+            key,
+            label: fieldLabel,
+          })),
         })),
       }));
   }

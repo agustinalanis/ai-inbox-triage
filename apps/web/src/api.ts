@@ -6,11 +6,20 @@ export const MAX_MESSAGE_LENGTH = 1000
 
 export type Priority = 'low' | 'normal' | 'high' | 'urgent'
 
+export interface Category {
+  id: string
+  label: string
+  /** The data the classifier extracts for this category, with a label for the inbox. */
+  fields: { key: string; label: string }[]
+}
+
 export interface Business {
   id: string
   name: string
   description: string
-  categories: { id: string; label: string }[]
+  /** Sample messages offered to visitors who do not know what to write. */
+  suggestions: string[]
+  categories: Category[]
 }
 
 // Mirrors the API response of /messages.
@@ -29,6 +38,8 @@ export interface Message {
   confidence: number
   model: string | null
   latencyMs: number
+  /** Seeded sample, shown apart from the messages the visitor sent. */
+  isExample: boolean
   createdAt: string
 }
 

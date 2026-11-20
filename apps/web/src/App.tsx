@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 import { ApiError, getBusinesses, getMessages, sortInbox, type Business, type Message } from './api.ts'
-import { Inbox } from './Inbox.tsx'
+import { Inbox, RetryButton } from './Inbox.tsx'
 import { MessageForm } from './MessageForm.tsx'
 
 const errorText = (error: unknown) =>
@@ -46,8 +46,8 @@ function App() {
       <header className="app-header">
         <h1>AI Inbox Triage</h1>
         <p className="muted">
-          Escribí un mensaje como si fueras un cliente: la IA lo clasifica, le asigna prioridad, extrae
-          los datos y propone una respuesta para que el equipo la revise.
+          Escribí como si fueras un cliente. La IA clasifica el mensaje, le asigna prioridad y prepara
+          un borrador de respuesta para el equipo.
         </p>
       </header>
       <main className="layout">
@@ -65,10 +65,19 @@ function App() {
           />
         ) : (
           <section className="panel">
-            <p className="muted">{error ? 'No se pudieron cargar los negocios.' : 'Cargando…'}</p>
+            {error ? (
+              <div role="alert">
+                <p className="form-error">{error}</p>
+                <RetryButton />
+              </div>
+            ) : (
+              <p className="muted">Cargando…</p>
+            )}
           </section>
         )}
-        <Inbox business={business} messages={messages} loading={loading} error={error} />
+        {businessId && (
+          <Inbox business={business} messages={messages} loading={loading} error={error} />
+        )}
       </main>
     </div>
   )

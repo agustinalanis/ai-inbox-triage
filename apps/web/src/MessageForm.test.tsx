@@ -1,10 +1,16 @@
 import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import type { Business, Message } from './api.ts'
-import { MessageForm, WAKING_UP_DELAY_MS } from './MessageForm.tsx'
+import { COOLDOWN_SECONDS, MessageForm, WAKING_UP_DELAY_MS } from './MessageForm.tsx'
 
 const businesses: Business[] = [
-  { id: 'consultorio', name: 'Consultorio', description: '', categories: [] },
+  {
+    id: 'consultorio',
+    name: 'Consultorio',
+    description: '',
+    suggestions: ['Quiero un turno para el martes.'],
+    categories: [],
+  },
 ]
 
 function renderForm(onCreated = vi.fn()) {
@@ -19,7 +25,8 @@ function renderForm(onCreated = vi.fn()) {
   return {
     onCreated,
     textarea: screen.getByLabelText('Mensaje'),
-    submit: () => screen.getByRole<HTMLButtonElement>('button'),
+    submit: () =>
+      screen.getByRole<HTMLButtonElement>('button', { name: /Clasificar|Clasificando|Esperá/ }),
   }
 }
 
@@ -91,5 +98,34 @@ describe('MessageForm', () => {
       text: 'Quiero un turno',
     })
     expect((textarea as HTMLTextAreaElement).value).toBe('')
+  })
+
+  it('fills the message with a suggestion', () => {
+    const { textarea, submit } = renderForm()
+    fireEvent.click(screen.getByRole('button', { name: 'Quiero un turno para el martes.' }))
+
+    expect((textarea as HTMLTextAreaElement).value).toBe('Quiero un turno para el martes.')
+    expect(submit().disabled).toBe(false)
+  })
+
+  it('waits before allowing another message, at the pace the API allows', async () => {
+    vi.useFakeTimers()
+    vi.stubGlobal('fetch', vi.fn(() => jsonResponse(201, { id: 'm1' })))
+    const { textarea, submit, onCreated } = renderForm()
+    fireEvent.change(textarea, { target: { value: 'Hola' } })
+    await act(async () => {
+      fireEvent.click(submit())
+    })
+    expect(onCreated).toHaveBeenCalled()
+
+    fireEvent.change(textarea, { target: { value: 'Otro mensaje' } })
+    expect(submit().disabled).toBe(true)
+    expect(submit().textContent).toBe(`Esperá ${COOLDOWN_SECONDS} s para enviar otro`)
+
+    await act(() => vi.advanceTimersByTimeAsync((COOLDOWN_SECONDS - 1) * 1000))
+    expect(submit().disabled).toBe(true)
+    await act(() => vi.advanceTimersByTimeAsync(1000))
+    expect(submit().disabled).toBe(false)
+    expect(submit().textContent).toBe('Clasificar mensaje')
   })
 })

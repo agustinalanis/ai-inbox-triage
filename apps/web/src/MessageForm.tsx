@@ -1,8 +1,11 @@
-import { useEffect, useId, useState, type SubmitEvent } from 'react'
+import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react'
 import { ApiError, MAX_MESSAGE_LENGTH, postMessage, type Business, type Message } from './api.ts'
 
 // The free-tier API host sleeps when idle; past this delay, the first request is probably waking it up.
 export const WAKING_UP_DELAY_MS = 3000
+
+// The API allows 5 messages per minute per IP: pacing sends at that rate means visitors never hit its 429.
+export const COOLDOWN_SECONDS = 12
 
 interface Props {
   businesses: Business[]
@@ -19,6 +22,11 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
   const [sending, setSending] = useState(false)
   const [wakingUp, setWakingUp] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // When the visitor may send again, and the clock that counts down to it.
+  const [cooldownEnd, setCooldownEnd] = useState(0)
+  const [now, setNow] = useState(Date.now)
+  const textRef = useRef<HTMLTextAreaElement>(null)
+  const suggestions = businesses.find((business) => business.id === businessId)?.suggestions ?? []
 
   useEffect(() => {
     if (!sending) return
@@ -29,9 +37,27 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
     }
   }, [sending])
 
+  useEffect(() => {
+    if (cooldownEnd === 0) return
+    const timer = setInterval(() => {
+      const current = Date.now()
+      setNow(current)
+      if (current >= cooldownEnd) clearInterval(timer)
+    }, 250)
+    return () => clearInterval(timer)
+  }, [cooldownEnd])
+
+  const cooldown = Math.max(0, Math.ceil((cooldownEnd - now) / 1000))
+
   const length = text.trim().length
   const tooLong = length > MAX_MESSAGE_LENGTH
-  const canSend = length > 0 && !tooLong && !sending
+  const canSend = length > 0 && !tooLong && !sending && cooldown === 0
+
+  function applySuggestion(suggestion: string) {
+    setText(suggestion)
+    setError(null)
+    textRef.current?.focus()
+  }
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -46,6 +72,9 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
         senderEmail: senderEmail.trim() || undefined,
       })
       setText('')
+      const sentAt = Date.now()
+      setNow(sentAt)
+      setCooldownEnd(sentAt + COOLDOWN_SECONDS * 1000)
       onCreated(message)
     } catch (error_) {
       setError(error_ instanceof ApiError ? error_.message : 'Algo salió mal. Probá de nuevo.')
@@ -98,8 +127,27 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
         </div>
       </div>
 
+      {suggestions.length > 0 && (
+        <div className="suggestions">
+          <p className="suggestions-title">¿No sabés qué escribir? Probá con uno de estos:</p>
+          <ul>
+            {suggestions.map((suggestion) => (
+              <li key={suggestion}>
+                <button
+                  type="button"
+                  className="suggestion"
+                  onClick={() => applySuggestion(suggestion)}
+                >
+                  {suggestion}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
       <label htmlFor={`${id}-text`}>Mensaje</label>
       <textarea
+        ref={textRef}
         id={`${id}-text`}
         rows={6}
         value={text}
@@ -117,8 +165,8 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
         </p>
       )}
 
-      <button type="submit" disabled={!canSend}>
-        {sending ? 'Clasificando…' : 'Clasificar mensaje'}
+      <button type="submit" className="primary" disabled={!canSend}>
+        {submitLabel(sending, cooldown)}
       </button>
 
       {wakingUp && (
@@ -142,4 +190,10 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
       </p>
     </form>
   )
+}
+
+function submitLabel(sending: boolean, cooldown: number): string {
+  if (sending) return 'Clasificando…'
+  if (cooldown > 0) return `Esperá ${cooldown} s para enviar otro`
+  return 'Clasificar mensaje'
 }

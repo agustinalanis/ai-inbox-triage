@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react'
+import { cleanup, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it } from 'vitest'
 import type { Business, Message } from './api.ts'
 import { Inbox } from './Inbox.tsx'
@@ -7,7 +7,17 @@ const business: Business = {
   id: 'consultorio',
   name: 'Consultorio',
   description: '',
-  categories: [{ id: 'new-appointment', label: 'Pedir turno' }],
+  suggestions: [],
+  categories: [
+    {
+      id: 'new-appointment',
+      label: 'Pedir turno',
+      fields: [
+        { key: 'patientName', label: 'Paciente' },
+        { key: 'insurance', label: 'Obra social' },
+      ],
+    },
+  ],
 }
 
 const message: Message = {
@@ -24,32 +34,58 @@ const message: Message = {
   confidence: 0.9,
   model: 'gemini',
   latencyMs: 100,
+  isExample: false,
   createdAt: '2026-11-20T12:00:00.000Z',
 }
+
+const renderInbox = (messages: Message[]) =>
+  render(<Inbox business={business} messages={messages} loading={false} error={null} />)
+
+const section = (name: string) => screen.getByRole('region', { name: new RegExp(`^${name}`) })
 
 afterEach(cleanup)
 
 describe('Inbox', () => {
-  it('labels the suggested reply as a draft to review', () => {
-    render(<Inbox business={business} messages={[message]} loading={false} error={null} />)
-    expect(screen.getByText('Borrador: revisar antes de enviar')).toBeTruthy()
-    expect(screen.getByText(message.suggestedReply!)).toBeTruthy()
-    expect(screen.getByRole('button', { name: 'Copiar' })).toBeTruthy()
-    expect(screen.getByText('Pedir turno')).toBeTruthy()
-    expect(screen.getByText('Requiere humano')).toBeTruthy()
+  it('separates the visitor messages from the examples', () => {
+    renderInbox([message, { ...message, id: 'e1', text: 'Un ejemplo', isExample: true }])
+
+    expect(within(section('Mis mensajes')).getByText('Quiero un turno')).toBeTruthy()
+    expect(within(section('Mis mensajes')).queryByText('Un ejemplo')).toBeNull()
+    expect(within(section('Ejemplos')).getByText('Un ejemplo')).toBeTruthy()
   })
 
-  it('shows no draft for escalated messages and labels unclassified ones', () => {
-    render(
-      <Inbox
-        business={business}
-        messages={[{ ...message, category: null, suggestedReply: null }]}
-        loading={false}
-        error={null}
-      />,
-    )
-    expect(screen.queryByText('Borrador: revisar antes de enviar')).toBeNull()
-    expect(screen.queryByRole('button')).toBeNull()
+  it('invites to write when the visitor has not sent anything yet', () => {
+    renderInbox([{ ...message, isExample: true }])
+
+    expect(within(section('Mis mensajes')).getByText(/Todavía no enviaste mensajes/)).toBeTruthy()
+  })
+
+  it('shows the analysis with field labels and the reply labeled as a draft', () => {
+    const { container } = renderInbox([message])
+    container.querySelector('details')!.open = true
+
+    expect(screen.getByText('Pedir turno')).toBeTruthy()
+    expect(screen.getByText('Requiere humano')).toBeTruthy()
+    expect(screen.getByText('Obra social')).toBeTruthy()
+    expect(screen.queryByText('insurance')).toBeNull()
+    expect(screen.getByText('Borrador: revisar antes de enviar')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Copiar' })).toBeTruthy()
+  })
+
+  it('lists the extracted data in the config order, whatever order it was stored in', () => {
+    const { container } = renderInbox([
+      { ...message, extracted: { insurance: 'OSDE', patientName: 'Laura' } },
+    ])
+
+    const labels = [...container.querySelectorAll('dt')].map((dt) => dt.textContent)
+    expect(labels).toEqual(['Paciente', 'Obra social'])
+  })
+
+  it('shows no analysis for unclassified messages without data or draft', () => {
+    renderInbox([{ ...message, category: null, extracted: {}, suggestedReply: null }])
+
     expect(screen.getByText('Sin clasificar')).toBeTruthy()
+    expect(screen.queryByText('Ver análisis')).toBeNull()
+    expect(screen.queryByText('Borrador: revisar antes de enviar')).toBeNull()
   })
 })

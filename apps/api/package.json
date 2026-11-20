@@ -17,7 +17,8 @@
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
     "typecheck": "tsc --noEmit",
     "eval": "nest build && node dist/evals/run-evals.js",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
   },
   "dependencies": {
     "@ai-sdk/google": "4.0.122",

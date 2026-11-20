@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "typecheck": "tsc -b",
     "test": "vitest run",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"*.ts\""
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"*.ts\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"*.ts\""
   },
   "dependencies": {
     "react": "^19.3.1",

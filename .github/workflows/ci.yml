@@ -4,18 +4,51 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
 
 jobs:
-  check:
+  ci:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: inbox
+          POSTGRES_PASSWORD: inbox
+          POSTGRES_DB: inbox_triage
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U inbox -d inbox_triage"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
     steps:
-      - uses: actions/checkout@v5
-      - uses: actions/setup-node@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
+      # The example values point at the service above; the e2e tests read this file.
+      - run: cp .env.example .env
       - run: npm ci
+      - run: npm run format:check
       - run: npm run lint
       - run: npm run typecheck
+      - name: Migrations apply to an empty database
+        run: npx prisma migrate deploy
+        working-directory: apps/api
+      - name: Schema has no changes without a migration
+        run: npx prisma migrate diff --from-config-datasource --to-schema prisma/schema.prisma --exit-code
+        working-directory: apps/api
       - run: npm test
+      # Uses a fake classifier: no Gemini quota is spent.
+      - run: npm run test:e2e
+      - run: npm run build

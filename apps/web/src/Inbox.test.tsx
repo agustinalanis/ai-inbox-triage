@@ -1,5 +1,12 @@
-import { cleanup, render, screen, within } from '@testing-library/react';
-import { afterEach, describe, expect, it } from 'vitest';
+import {
+  act,
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from '@testing-library/react';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import type { Business, Message } from './api.ts';
 import { Inbox } from './Inbox.tsx';
 
@@ -51,7 +58,11 @@ const renderInbox = (messages: Message[]) =>
 const section = (name: string) =>
   screen.getByRole('region', { name: new RegExp(`^${name}`) });
 
-afterEach(cleanup);
+afterEach(() => {
+  cleanup();
+  vi.unstubAllGlobals();
+  vi.useRealTimers();
+});
 
 describe('Inbox', () => {
   it('separates the visitor messages from the examples', () => {
@@ -108,5 +119,35 @@ describe('Inbox', () => {
     expect(screen.getByText('Sin clasificar')).toBeTruthy();
     expect(screen.queryByText('Ver análisis')).toBeNull();
     expect(screen.queryByText('Borrador: revisar antes de enviar')).toBeNull();
+  });
+
+  it('confirms the copy for two seconds', async () => {
+    vi.useFakeTimers();
+    vi.stubGlobal('navigator', {
+      clipboard: { writeText: vi.fn(() => Promise.resolve()) },
+    });
+    renderInbox([message]);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Copiar' }));
+    });
+    expect(screen.getByRole('button', { name: 'Copiado' })).toBeTruthy();
+
+    await act(() => vi.advanceTimersByTimeAsync(2000));
+    expect(screen.getByRole('button', { name: 'Copiar' })).toBeTruthy();
+  });
+
+  it('keeps the copy button as is when the clipboard is blocked', async () => {
+    vi.stubGlobal('navigator', {
+      clipboard: {
+        writeText: vi.fn(() => Promise.reject(new Error('denied'))),
+      },
+    });
+    renderInbox([message]);
+
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: 'Copiar' }));
+    });
+    expect(screen.getByRole('button', { name: 'Copiar' })).toBeTruthy();
   });
 });

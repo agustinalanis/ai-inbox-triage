@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import type { Business, Message, Priority } from './api.ts';
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -154,11 +154,16 @@ function MessageCard({
 function DraftReply({ text }: Readonly<{ text: string }>) {
   const [copied, setCopied] = useState(false);
 
+  useEffect(() => {
+    if (!copied) return;
+    const timer = setTimeout(() => setCopied(false), 2000);
+    return () => clearTimeout(timer);
+  }, [copied]);
+
   async function copy() {
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
     } catch {
       // Clipboard blocked (insecure context, denied permission): the text stays selectable.
     }

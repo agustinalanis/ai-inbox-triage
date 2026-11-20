@@ -1,85 +1,102 @@
-import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react'
-import { ApiError, MAX_MESSAGE_LENGTH, postMessage, type Business, type Message } from './api.ts'
+import { useEffect, useId, useRef, useState, type SubmitEvent } from 'react';
+import {
+  ApiError,
+  MAX_MESSAGE_LENGTH,
+  postMessage,
+  type Business,
+  type Message,
+} from './api.ts';
 
 // The free-tier API host sleeps when idle; past this delay, the first request is probably waking it up.
-export const WAKING_UP_DELAY_MS = 3000
+export const WAKING_UP_DELAY_MS = 3000;
 
 // The API allows 5 messages per minute per IP: pacing sends at that rate means visitors never hit its 429.
-export const COOLDOWN_SECONDS = 12
+export const COOLDOWN_SECONDS = 12;
 
 interface Props {
-  businesses: Business[]
-  businessId: string
-  onBusinessChange: (id: string) => void
-  onCreated: (message: Message) => void
+  businesses: Business[];
+  businessId: string;
+  onBusinessChange: (id: string) => void;
+  onCreated: (message: Message) => void;
 }
 
-export function MessageForm({ businesses, businessId, onBusinessChange, onCreated }: Readonly<Props>) {
-  const id = useId()
-  const [text, setText] = useState('')
-  const [senderName, setSenderName] = useState('')
-  const [senderEmail, setSenderEmail] = useState('')
-  const [sending, setSending] = useState(false)
-  const [wakingUp, setWakingUp] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+export function MessageForm({
+  businesses,
+  businessId,
+  onBusinessChange,
+  onCreated,
+}: Readonly<Props>) {
+  const id = useId();
+  const [text, setText] = useState('');
+  const [senderName, setSenderName] = useState('');
+  const [senderEmail, setSenderEmail] = useState('');
+  const [sending, setSending] = useState(false);
+  const [wakingUp, setWakingUp] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   // When the visitor may send again, and the clock that counts down to it.
-  const [cooldownEnd, setCooldownEnd] = useState(0)
-  const [now, setNow] = useState(Date.now)
-  const textRef = useRef<HTMLTextAreaElement>(null)
-  const suggestions = businesses.find((business) => business.id === businessId)?.suggestions ?? []
+  const [cooldownEnd, setCooldownEnd] = useState(0);
+  const [now, setNow] = useState(Date.now);
+  const textRef = useRef<HTMLTextAreaElement>(null);
+  const suggestions =
+    businesses.find((business) => business.id === businessId)?.suggestions ??
+    [];
 
   useEffect(() => {
-    if (!sending) return
-    const timer = setTimeout(() => setWakingUp(true), WAKING_UP_DELAY_MS)
+    if (!sending) return;
+    const timer = setTimeout(() => setWakingUp(true), WAKING_UP_DELAY_MS);
     return () => {
-      clearTimeout(timer)
-      setWakingUp(false)
-    }
-  }, [sending])
+      clearTimeout(timer);
+      setWakingUp(false);
+    };
+  }, [sending]);
 
   useEffect(() => {
-    if (cooldownEnd === 0) return
+    if (cooldownEnd === 0) return;
     const timer = setInterval(() => {
-      const current = Date.now()
-      setNow(current)
-      if (current >= cooldownEnd) clearInterval(timer)
-    }, 250)
-    return () => clearInterval(timer)
-  }, [cooldownEnd])
+      const current = Date.now();
+      setNow(current);
+      if (current >= cooldownEnd) clearInterval(timer);
+    }, 250);
+    return () => clearInterval(timer);
+  }, [cooldownEnd]);
 
-  const cooldown = Math.max(0, Math.ceil((cooldownEnd - now) / 1000))
+  const cooldown = Math.max(0, Math.ceil((cooldownEnd - now) / 1000));
 
-  const length = text.trim().length
-  const tooLong = length > MAX_MESSAGE_LENGTH
-  const canSend = length > 0 && !tooLong && !sending && cooldown === 0
+  const length = text.trim().length;
+  const tooLong = length > MAX_MESSAGE_LENGTH;
+  const canSend = length > 0 && !tooLong && !sending && cooldown === 0;
 
   function applySuggestion(suggestion: string) {
-    setText(suggestion)
-    setError(null)
-    textRef.current?.focus()
+    setText(suggestion);
+    setError(null);
+    textRef.current?.focus();
   }
 
   async function handleSubmit(event: SubmitEvent<HTMLFormElement>) {
-    event.preventDefault()
-    if (!canSend) return
-    setSending(true)
-    setError(null)
+    event.preventDefault();
+    if (!canSend) return;
+    setSending(true);
+    setError(null);
     try {
       const message = await postMessage({
         businessId,
         text: text.trim(),
         senderName: senderName.trim() || undefined,
         senderEmail: senderEmail.trim() || undefined,
-      })
-      setText('')
-      const sentAt = Date.now()
-      setNow(sentAt)
-      setCooldownEnd(sentAt + COOLDOWN_SECONDS * 1000)
-      onCreated(message)
+      });
+      setText('');
+      const sentAt = Date.now();
+      setNow(sentAt);
+      setCooldownEnd(sentAt + COOLDOWN_SECONDS * 1000);
+      onCreated(message);
     } catch (error_) {
-      setError(error_ instanceof ApiError ? error_.message : 'Algo salió mal. Probá de nuevo.')
+      setError(
+        error_ instanceof ApiError
+          ? error_.message
+          : 'Algo salió mal. Probá de nuevo.',
+      );
     } finally {
-      setSending(false)
+      setSending(false);
     }
   }
 
@@ -129,7 +146,9 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
 
       {suggestions.length > 0 && (
         <div className="suggestions">
-          <p className="suggestions-title">¿No sabés qué escribir? Probá con uno de estos:</p>
+          <p className="suggestions-title">
+            ¿No sabés qué escribir? Probá con uno de estos:
+          </p>
           <ul>
             {suggestions.map((suggestion) => (
               <li key={suggestion}>
@@ -156,7 +175,10 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
         aria-describedby={`${id}-count`}
         onChange={(event) => setText(event.target.value)}
       />
-      <p id={`${id}-count`} className={tooLong ? 'counter counter-over' : 'counter'}>
+      <p
+        id={`${id}-count`}
+        className={tooLong ? 'counter counter-over' : 'counter'}
+      >
         {length}/{MAX_MESSAGE_LENGTH}
       </p>
       {tooLong && (
@@ -181,19 +203,23 @@ export function MessageForm({ businesses, businessId, onBusinessChange, onCreate
       )}
 
       <p className="privacy">
-        Es una demo: los mensajes se procesan con Google Gemini (nivel gratuito), donde Google puede
-        usarlos para mejorar sus productos y revisores humanos pueden leerlos. No escribas datos
-        personales reales.{' '}
-        <a href="https://ai.google.dev/gemini-api/terms" target="_blank" rel="noreferrer">
+        Es una demo: los mensajes se procesan con Google Gemini (nivel
+        gratuito), donde Google puede usarlos para mejorar sus productos y
+        revisores humanos pueden leerlos. No escribas datos personales reales.{' '}
+        <a
+          href="https://ai.google.dev/gemini-api/terms"
+          target="_blank"
+          rel="noreferrer"
+        >
           Términos de Gemini API
         </a>
       </p>
     </form>
-  )
+  );
 }
 
 function submitLabel(sending: boolean, cooldown: number): string {
-  if (sending) return 'Clasificando…'
-  if (cooldown > 0) return `Esperá ${cooldown} s para enviar otro`
-  return 'Clasificar mensaje'
+  if (sending) return 'Clasificando…';
+  if (cooldown > 0) return `Esperá ${cooldown} s para enviar otro`;
+  return 'Clasificar mensaje';
 }

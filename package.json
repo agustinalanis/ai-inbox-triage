@@ -15,6 +15,7 @@
     "typecheck": "npm run typecheck --workspaces",
     "test": "npm run test --workspaces --if-present",
     "test:e2e": "npm run test:e2e -w api",
-    "eval": "npm run eval -w api --"
+    "eval": "npm run eval -w api --",
+    "format": "npm run format --workspaces"
   }
 }

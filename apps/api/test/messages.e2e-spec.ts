@@ -177,8 +177,10 @@ describe('Messages (e2e)', () => {
       ),
     );
     expect(allowed.map((r) => r.status)).toEqual([201, 201, 201, 201, 201]);
-    await post(session, { businessId: 'consultorio', text: 'Uno más' }).expect(
-      429,
-    );
+    const limited = await post(session, {
+      businessId: 'consultorio',
+      text: 'Uno más',
+    }).expect(429);
+    expect(limited.body.message).toMatch(/Esperá un minuto/);
   });
 });

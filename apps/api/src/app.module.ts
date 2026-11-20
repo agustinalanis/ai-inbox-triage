@@ -16,7 +16,12 @@ import { PrismaModule } from './prisma/prisma.module.js';
       validationSchema: envSchema,
     }),
     // Applied only where a route opts in with ThrottlerGuard.
-    ThrottlerModule.forRoot([{ ttl: 60_000, limit: 5 }]),
+    ThrottlerModule.forRoot({
+      throttlers: [{ ttl: 60_000, limit: 5 }],
+      // Shown as is by the web, like the daily limit message.
+      errorMessage:
+        'Enviaste demasiados mensajes seguidos. Esperá un minuto y probá de nuevo.',
+    }),
     PrismaModule,
     BusinessesModule,
     MessagesModule,

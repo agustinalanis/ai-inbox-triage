@@ -107,6 +107,7 @@ export function MessageForm({
       <select
         id={`${id}-business`}
         value={businessId}
+        disabled={sending}
         onChange={(event) => onBusinessChange(event.target.value)}
       >
         {businesses.map((business) => (
@@ -137,6 +138,7 @@ export function MessageForm({
             id={`${id}-email`}
             type="email"
             value={senderEmail}
+            maxLength={254}
             autoComplete="off"
             onChange={(event) => setSenderEmail(event.target.value)}
           />

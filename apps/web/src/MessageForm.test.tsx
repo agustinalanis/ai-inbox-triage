@@ -164,4 +164,27 @@ describe('MessageForm', () => {
     expect(submit().disabled).toBe(false);
     expect(submit().textContent).toBe('Clasificar mensaje');
   });
+
+  it('locks the business while a message is being sent', async () => {
+    let respond: (response: Response) => void = () => {};
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            respond = resolve;
+          }),
+      ),
+    );
+    const { textarea, submit } = renderForm();
+    const business = screen.getByLabelText<HTMLSelectElement>('Negocio');
+    fireEvent.change(textarea, { target: { value: 'Hola' } });
+    fireEvent.click(submit());
+
+    expect(business.disabled).toBe(true);
+    await act(async () => {
+      respond(new Response(JSON.stringify({ id: 'm1' }), { status: 201 }));
+    });
+    expect(business.disabled).toBe(false);
+  });
 });

@@ -193,7 +193,8 @@ function applyBusinessRules(
 function fallbackClassification(latencyMs: number): Classification {
   return {
     category: null,
-    priority: 'normal',
+    // Unread by the model, it could be a crisis: keep it above routine messages.
+    priority: 'high',
     extracted: {},
     suggestedReply: null,
     needsHuman: true,

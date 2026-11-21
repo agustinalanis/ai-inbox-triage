@@ -124,6 +124,7 @@ describe('ClassifierService', () => {
 
     expect(result).toMatchObject({
       category: null,
+      priority: 'high',
       needsHuman: true,
       suggestedReply: null,
       confidence: 0,
@@ -188,6 +189,7 @@ describe('ClassifierService', () => {
 
     expect(result).toMatchObject({
       category: null,
+      priority: 'high',
       needsHuman: true,
       model: null,
     });

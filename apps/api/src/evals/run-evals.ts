@@ -72,13 +72,12 @@ try {
       const outcomes: EvalOutcome[] = [];
       for (const expected of cases) {
         // Sequential and paced on purpose: unpaced, the free tier failed every call after ~30 in a minute.
-        const paced = Promise.all([
+        const [result] = await Promise.all([
           classifier.classify(expected.text, business, {
             model: google(modelId),
           }),
           sleep(MIN_CALL_INTERVAL_MS),
         ]);
-        const [result] = await paced; // NOSONAR typescript:S9382
         outcomes.push({ expected, result });
       }
 

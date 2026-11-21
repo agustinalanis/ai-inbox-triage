@@ -77,12 +77,14 @@ try {
       const outcomes: EvalOutcome[] = [];
       for (const expected of cases) {
         // Sequential and paced on purpose: unpaced, the free tier failed every call after ~30 in a minute.
-        const [result] = await Promise.all([
+        const paced = Promise.all([
           classifier.classify(expected.text, business, {
             model: google(modelId),
           }),
           sleep(MIN_CALL_INTERVAL_MS),
         ]);
+        // Awaiting inside the loop is that pacing, so Sonar's await-in-loop rule does not apply.
+        const [result] = await paced; // NOSONAR typescript:S9382
         outcomes.push({ expected, result });
       }
 

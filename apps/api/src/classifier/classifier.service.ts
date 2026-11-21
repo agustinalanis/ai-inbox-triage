@@ -115,7 +115,8 @@ export class ClassifierService {
         schema: buildOutputSchema(business),
         schemaName: 'triage',
         instructions: buildInstructions(business),
-        prompt: `<message>\n${text}\n</message>`,
+        // Tags inside the text could close the delimiter early and pass the rest as instructions.
+        prompt: `<message>\n${text.replaceAll(/<\/?message>/gi, '')}\n</message>`,
         ...(pinnedModel ? { model: pinnedModel, fallback: false } : {}),
       });
       return applyBusinessRules(object, business, model.modelId, elapsed());

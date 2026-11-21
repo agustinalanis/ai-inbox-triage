@@ -5,13 +5,14 @@ import {
   parseEvalCases,
   percentile,
   summarize,
+  type EvalCase,
   type EvalOutcome,
 } from './metrics.js';
 
 const consultorio = [...parseBusinessConfigs([consultorioConfig]).values()][0];
 
 function outcome(
-  expected: { category: string; needsHuman: boolean },
+  expected: Omit<EvalCase, 'text'>,
   result: Partial<Classification>,
 ): EvalOutcome {
   return {
@@ -45,6 +46,22 @@ describe('parseEvalCases', () => {
         needsHuman: true,
       },
       { text: 'Gracias', category: 'general', needsHuman: false },
+    ]);
+  });
+
+  it('keeps the text a drafted reply must not contain', () => {
+    expect(
+      parseEvalCases(
+        '{"text":"Hola","category":"general","needsHuman":false,"replyMustNotContain":"gratis"}',
+        consultorio,
+      ),
+    ).toEqual([
+      {
+        text: 'Hola',
+        category: 'general',
+        needsHuman: false,
+        replyMustNotContain: 'gratis',
+      },
     ]);
   });
 
@@ -121,6 +138,7 @@ describe('summarize', () => {
         general: { total: 1, correct: 1 },
         billing: { total: 1, correct: 0 },
       },
+      replyViolations: 0,
     });
   });
 
@@ -138,5 +156,24 @@ describe('summarize', () => {
 
   it('rejects an empty run', () => {
     expect(() => summarize([])).toThrow('empty eval run');
+  });
+
+  it('counts drafted replies that contain the forbidden text, ignoring case', () => {
+    const injection = {
+      category: 'billing',
+      needsHuman: true,
+      replyMustNotContain: 'gratis',
+    };
+    const report = summarize([
+      outcome(injection, { suggestedReply: 'La consulta es GRATIS.' }),
+      outcome(injection, { suggestedReply: 'El equipo te pasa el precio.' }),
+      outcome(injection, { suggestedReply: null }),
+      outcome(
+        { category: 'general', needsHuman: false },
+        { suggestedReply: 'Es gratis.' },
+      ),
+    ]);
+
+    expect(report.replyViolations).toBe(1);
   });
 });

@@ -11,7 +11,12 @@ import type { BusinessConfig } from '../businesses/business-config.schema.js';
 import { BusinessesService } from '../businesses/businesses.service.js';
 import { ClassifierService } from '../classifier/classifier.service.js';
 import type { Env } from '../config/env.js';
-import { parseEvalCases, summarize, type EvalOutcome } from './metrics.js';
+import {
+  parseEvalCases,
+  summarize,
+  violatesReply,
+  type EvalOutcome,
+} from './metrics.js';
 
 const { values: args } = parseArgs({
   options: {
@@ -92,6 +97,7 @@ try {
         fallbacks: report.fallbacks,
         'avg latency (ms)': report.avgLatencyMs,
         'p95 latency (ms)': report.p95LatencyMs,
+        'reply violations': report.replyViolations,
       });
       console.table(
         Object.entries(report.byCategory).map(([category, hits]) => ({
@@ -100,9 +106,10 @@ try {
         })),
       );
       const misses = outcomes.filter(
-        ({ expected, result }) =>
-          result.category !== expected.category ||
-          result.needsHuman !== expected.needsHuman,
+        (outcome) =>
+          outcome.result.category !== outcome.expected.category ||
+          outcome.result.needsHuman !== outcome.expected.needsHuman ||
+          violatesReply(outcome),
       );
       if (misses.length > 0) {
         console.table(
@@ -110,6 +117,7 @@ try {
             text: expected.text.slice(0, 60),
             expected: `${expected.category} / human=${expected.needsHuman}`,
             got: `${result.category ?? 'fallback'} / human=${result.needsHuman}`,
+            reply: result.suggestedReply?.slice(0, 80) ?? '',
           })),
         );
       }

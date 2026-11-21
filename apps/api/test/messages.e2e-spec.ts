@@ -109,6 +109,10 @@ describe('Messages (e2e)', () => {
     await list(newSession(), 'nope').expect(400);
   });
 
+  it('rejects a business id longer than 50 characters', async () => {
+    await list(newSession(), 'a'.repeat(51)).expect(400);
+  });
+
   it('rejects a missing or invalid session header', async () => {
     await request(app.getHttpServer())
       .get('/messages')
@@ -186,5 +190,13 @@ describe('Messages (e2e)', () => {
       text: 'Uno más',
     }).expect(429);
     expect(limited.body.message).toMatch(/Esperá un minuto/);
+  });
+
+  it('answers 429 after 30 inbox loads per minute from the same IP', async () => {
+    const session = newSession();
+    for (let i = 0; i < 30; i++) {
+      await list(session).expect(200);
+    }
+    await list(session).expect(429);
   });
 });

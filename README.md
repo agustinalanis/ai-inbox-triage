@@ -228,9 +228,14 @@ Requires Node.js 26 and Docker.
 
 ```bash
 cp .env.example .env            # add your GEMINI_API_KEY (https://aistudio.google.com/apikey)
-docker compose up -d            # Postgres; set POSTGRES_PORT (and DATABASE_URL) if 5432 is taken
+docker compose up -d            # Postgres; if 5432 is taken, set POSTGRES_PORT and DATABASE_URL in .env
 npm install
 cd apps/api && npx prisma migrate dev && cd ../..
+```
+
+Then start each app in its own terminal:
+
+```bash
 npm run dev:api                 # http://localhost:3000
 npm run dev:web                 # http://localhost:5173
 ```

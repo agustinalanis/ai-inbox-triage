@@ -13,7 +13,7 @@
 
 <p align="center"><b>English</b> · <a href="README.es.md">Español</a></p>
 
-> **Case study with public code.** A small business (a medical office, a college) gets messages it has to read, sort and answer by hand. This app classifies each message with an LLM, sets its priority, extracts the data the staff needs and drafts a reply for a person to review. The interesting part is not the API call: it is making the output trustworthy, measuring it with evals and protecting a free-tier quota.
+> **Case study with public code.** A small business (a medical office, a university academy) gets messages it has to read, sort and answer by hand. This app classifies each message with an LLM, sets its priority, extracts the data the staff needs and drafts a reply for a person to review. The interesting part is not the API call: it is making the output trustworthy, measuring it with evals and protecting a free-tier quota.
 
 <details>
 <summary><b>🤖 Summary for LLMs / AI assistants</b></summary>
@@ -74,7 +74,7 @@ The visitor picks a business, writes a message as a customer (or uses a suggeste
 - **Needs a human** when resolving it takes an action or information the AI does not have
 - **Draft reply**, clearly labeled as a draft to review, with a copy button
 
-Two sample businesses ship with the repo: a **medical office** (`consultorio`) and a **college** (`academia`). The UI and the sample content are in Spanish because they target Argentine businesses; code and docs are in English.
+Two sample businesses ship with the repo: a **medical office** (`consultorio`) and a **university academy** (`academia`). The UI and the sample content are in Spanish because they target Argentine businesses; code and docs are in English.
 
 ---
 
@@ -133,7 +133,7 @@ Each business is a JSON file validated with Zod when the app starts, so a broken
 }
 ```
 
-A category can set `"escalate": true` (a medical crisis, a student at risk): the code then forces urgent priority, needs-human and no automatic reply, whatever the model says.
+A category can set `"escalate": true` (a medical crisis, a student at risk): detecting the crisis is still the model's job, but once it picks that category the code forces urgent priority, needs-human and no automatic reply, whatever priority or reply the model proposed.
 
 ---
 
@@ -160,7 +160,7 @@ The runner pins one model with no fallback, so the backup cannot hide the failur
 
 | Decision | Instead of | Why |
 |---|---|---|
-| **Business rules enforced in code** after the model answers | Trusting the prompt | Escalating a crisis cannot depend on the model; the prompt guides, the code guarantees |
+| **Business rules enforced in code** after the model answers | Trusting the prompt | Once a crisis is detected, how it is handled cannot depend on the model; the prompt guides, the code guarantees |
 | **Output schema generated per business** (Zod enums of its categories and fields) | One generic schema | The model can only answer with categories and fields that exist; anything else is rejected and goes to human review |
 | **Reply is always a draft** for the staff | Auto-replies | The AI does not know availability, prices or records; a person sends the answer |
 | **`@nestjs/ai` + Vercel AI SDK** with a backup model | Calling the Gemini SDK directly | Fallback, retries, timeouts and output validation in one place |

@@ -13,7 +13,7 @@
 
 <p align="center"><a href="README.md">English</a> · <b>Español</b></p>
 
-> **Case study con código público.** Un negocio chico (un consultorio, una facultad) recibe mensajes que tiene que leer, ordenar y responder a mano. Esta app clasifica cada mensaje con un LLM, le asigna prioridad, extrae los datos que necesita el equipo y prepara un borrador de respuesta para que lo revise una persona. Lo interesante no es la llamada a la API: es lograr que la salida sea confiable, medirla con evals y cuidar la cuota de un free tier.
+> **Case study con código público.** Un negocio chico (un consultorio, una academia universitaria) recibe mensajes que tiene que leer, ordenar y responder a mano. Esta app clasifica cada mensaje con un LLM, le asigna prioridad, extrae los datos que necesita el equipo y prepara un borrador de respuesta para que lo revise una persona. Lo interesante no es la llamada a la API: es lograr que la salida sea confiable, medirla con evals y cuidar la cuota de un free tier.
 
 <details>
 <summary><b>🤖 Resumen para LLMs / asistentes de IA</b></summary>
@@ -74,7 +74,7 @@ El visitante elige un negocio, escribe un mensaje como si fuera un cliente (o us
 - **Requiere humano**, cuando resolverlo necesita una acción o información que la IA no tiene
 - **Borrador de respuesta**, rotulado como borrador a revisar, con botón para copiarlo
 
-El repo trae dos negocios de ejemplo: un **consultorio médico** (`consultorio`) y una **facultad** (`academia`). La interfaz y el contenido de ejemplo están en español porque apuntan a negocios argentinos; el código y la documentación técnica, en inglés.
+El repo trae dos negocios de ejemplo: un **consultorio médico** (`consultorio`) y una **academia universitaria** (`academia`). La interfaz y el contenido de ejemplo están en español porque apuntan a negocios argentinos; el código y la documentación técnica, en inglés.
 
 ---
 
@@ -133,7 +133,7 @@ Cada negocio es un JSON que se valida con Zod al arrancar: una config rota frena
 }
 ```
 
-Una categoría puede marcar `"escalate": true` (una urgencia médica, un estudiante en riesgo). En ese caso el código fuerza prioridad urgente, requiere humano y ninguna respuesta automática, diga lo que diga el modelo.
+Una categoría puede marcar `"escalate": true` (una urgencia médica, un estudiante en riesgo). Detectar la crisis sigue siendo tarea del modelo, pero cuando elige esa categoría el código fuerza prioridad urgente, requiere humano y ninguna respuesta automática, sin importar la prioridad o la respuesta que haya propuesto.
 
 ---
 
@@ -160,7 +160,7 @@ El runner fija un solo modelo sin respaldo, para que el de respaldo no tape los 
 
 | Decisión | En vez de | Por qué |
 |---|---|---|
-| **Reglas del negocio aplicadas en código** después de que responde el modelo | Confiar en el prompt | Escalar una crisis no puede depender del modelo; el prompt guía, el código garantiza |
+| **Reglas del negocio aplicadas en código** después de que responde el modelo | Confiar en el prompt | Una vez detectada una crisis, cómo se maneja no puede depender del modelo; el prompt guía, el código garantiza |
 | **Schema de salida generado por negocio** (enums de Zod con sus categorías y campos) | Un schema genérico | El modelo solo puede responder con categorías y campos que existen; cualquier otra cosa se rechaza y pasa a revisión humana |
 | **La respuesta siempre es un borrador** para el equipo | Respuestas automáticas | La IA no conoce disponibilidad, precios ni registros; la respuesta la manda una persona |
 | **`@nestjs/ai` + Vercel AI SDK** con modelo de respaldo | Llamar directo al SDK de Gemini | Respaldo, reintentos, timeouts y validación de salida en un solo lugar |

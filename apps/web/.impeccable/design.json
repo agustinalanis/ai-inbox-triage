@@ -1,0 +1,513 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-22T19:25:12.116Z",
+  "title": "Design System: AI Inbox Triage",
+  "extensions": {
+    "colorMeta": {
+      "accent": {
+        "role": "primary",
+        "displayName": "Board Indigo",
+        "canonical": "#4f46e5",
+        "oklch": "oklch(51.1% 0.23 277)",
+        "tonalRamp": [
+          "oklch(15% 0.117 277)",
+          "oklch(26.4% 0.179 277)",
+          "oklch(37.9% 0.216 277)",
+          "oklch(49.3% 0.23 277)",
+          "oklch(60.7% 0.219 277)",
+          "oklch(72.1% 0.185 277)",
+          "oklch(83.6% 0.126 277)",
+          "oklch(95% 0.044 277)"
+        ]
+      },
+      "accent-hover": {
+        "role": "primary",
+        "displayName": "Pressed Indigo",
+        "canonical": "#4338ca",
+        "oklch": "oklch(45.7% 0.215 277)",
+        "tonalRamp": [
+          "oklch(15% 0.109 277)",
+          "oklch(26.4% 0.167 277)",
+          "oklch(37.9% 0.202 277)",
+          "oklch(49.3% 0.215 277)",
+          "oklch(60.7% 0.205 277)",
+          "oklch(72.1% 0.172 277)",
+          "oklch(83.6% 0.118 277)",
+          "oklch(95% 0.041 277)"
+        ]
+      },
+      "accent-soft": {
+        "role": "primary",
+        "displayName": "Indigo Wash",
+        "canonical": "#eeedff",
+        "oklch": "oklch(95.2% 0.024 288.5)",
+        "tonalRamp": [
+          "oklch(15% 0.012 288.5)",
+          "oklch(26.4% 0.019 288.5)",
+          "oklch(37.9% 0.023 288.5)",
+          "oklch(49.3% 0.024 288.5)",
+          "oklch(60.7% 0.023 288.5)",
+          "oklch(72.1% 0.019 288.5)",
+          "oklch(83.6% 0.013 288.5)",
+          "oklch(95% 0.005 288.5)"
+        ]
+      },
+      "accent-ink": {
+        "role": "primary",
+        "displayName": "Indigo Ink",
+        "canonical": "#3730a3",
+        "oklch": "oklch(39.8% 0.177 277.4)",
+        "tonalRamp": [
+          "oklch(15% 0.09 277.4)",
+          "oklch(26.4% 0.138 277.4)",
+          "oklch(37.9% 0.167 277.4)",
+          "oklch(49.3% 0.177 277.4)",
+          "oklch(60.7% 0.169 277.4)",
+          "oklch(72.1% 0.143 277.4)",
+          "oklch(83.6% 0.097 277.4)",
+          "oklch(95% 0.034 277.4)"
+        ]
+      },
+      "accent-on-ink": {
+        "role": "primary",
+        "displayName": "Lavender on Ink",
+        "canonical": "#b4b0ff",
+        "oklch": "oklch(79% 0.111 285.9)",
+        "tonalRamp": [
+          "oklch(15% 0.057 285.9)",
+          "oklch(26.4% 0.087 285.9)",
+          "oklch(37.9% 0.105 285.9)",
+          "oklch(49.3% 0.111 285.9)",
+          "oklch(60.7% 0.106 285.9)",
+          "oklch(72.1% 0.089 285.9)",
+          "oklch(83.6% 0.061 285.9)",
+          "oklch(95% 0.021 285.9)"
+        ]
+      },
+      "ground": {
+        "role": "neutral",
+        "displayName": "Board Ground",
+        "canonical": "#f3f5f9",
+        "oklch": "oklch(97% 0.006 264.5)",
+        "tonalRamp": [
+          "oklch(15% 0.003 264.5)",
+          "oklch(26.4% 0.004 264.5)",
+          "oklch(37.9% 0.005 264.5)",
+          "oklch(49.3% 0.006 264.5)",
+          "oklch(60.7% 0.005 264.5)",
+          "oklch(72.1% 0.005 264.5)",
+          "oklch(83.6% 0.003 264.5)",
+          "oklch(95% 0.001 264.5)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Card White",
+        "canonical": "#ffffff",
+        "oklch": "oklch(100% 0 89.9)",
+        "tonalRamp": [
+          "oklch(15% 0 89.9)",
+          "oklch(26.4% 0 89.9)",
+          "oklch(37.9% 0 89.9)",
+          "oklch(49.3% 0 89.9)",
+          "oklch(60.7% 0 89.9)",
+          "oklch(72.1% 0 89.9)",
+          "oklch(83.6% 0 89.9)",
+          "oklch(95% 0 89.9)"
+        ]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Indigo-Black Ink",
+        "canonical": "#1b1f3b",
+        "oklch": "oklch(25.1% 0.053 275.7)",
+        "tonalRamp": [
+          "oklch(15% 0.027 275.7)",
+          "oklch(26.4% 0.041 275.7)",
+          "oklch(37.9% 0.05 275.7)",
+          "oklch(49.3% 0.053 275.7)",
+          "oklch(60.7% 0.051 275.7)",
+          "oklch(72.1% 0.043 275.7)",
+          "oklch(83.6% 0.029 275.7)",
+          "oklch(95% 0.01 275.7)"
+        ]
+      },
+      "ink-2": {
+        "role": "neutral",
+        "displayName": "Second Ink",
+        "canonical": "#4a5072",
+        "oklch": "oklch(44% 0.057 276.1)",
+        "tonalRamp": [
+          "oklch(15% 0.029 276.1)",
+          "oklch(26.4% 0.044 276.1)",
+          "oklch(37.9% 0.053 276.1)",
+          "oklch(49.3% 0.057 276.1)",
+          "oklch(60.7% 0.054 276.1)",
+          "oklch(72.1% 0.045 276.1)",
+          "oklch(83.6% 0.031 276.1)",
+          "oklch(95% 0.011 276.1)"
+        ]
+      },
+      "ink-3": {
+        "role": "neutral",
+        "displayName": "Third Ink",
+        "canonical": "#5f6584",
+        "oklch": "oklch(51.4% 0.05 276)",
+        "tonalRamp": [
+          "oklch(15% 0.025 276)",
+          "oklch(26.4% 0.039 276)",
+          "oklch(37.9% 0.047 276)",
+          "oklch(49.3% 0.05 276)",
+          "oklch(60.7% 0.047 276)",
+          "oklch(72.1% 0.04 276)",
+          "oklch(83.6% 0.027 276)",
+          "oklch(95% 0.009 276)"
+        ]
+      },
+      "line": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e1e5ee",
+        "oklch": "oklch(92.1% 0.013 266.7)",
+        "tonalRamp": [
+          "oklch(15% 0.007 266.7)",
+          "oklch(26.4% 0.01 266.7)",
+          "oklch(37.9% 0.012 266.7)",
+          "oklch(49.3% 0.013 266.7)",
+          "oklch(60.7% 0.012 266.7)",
+          "oklch(72.1% 0.01 266.7)",
+          "oklch(83.6% 0.007 266.7)",
+          "oklch(95% 0.002 266.7)"
+        ]
+      },
+      "line-strong": {
+        "role": "neutral",
+        "displayName": "Strong Line",
+        "canonical": "#878da8",
+        "oklch": "oklch(64.8% 0.041 275.3)",
+        "tonalRamp": [
+          "oklch(15% 0.021 275.3)",
+          "oklch(26.4% 0.032 275.3)",
+          "oklch(37.9% 0.038 275.3)",
+          "oklch(49.3% 0.041 275.3)",
+          "oklch(60.7% 0.039 275.3)",
+          "oklch(72.1% 0.033 275.3)",
+          "oklch(83.6% 0.022 275.3)",
+          "oklch(95% 0.008 275.3)"
+        ]
+      },
+      "error": {
+        "role": "neutral",
+        "displayName": "Alert Red",
+        "canonical": "#b42318",
+        "oklch": "oklch(50% 0.182 29.5)",
+        "tonalRamp": [
+          "oklch(15% 0.093 29.5)",
+          "oklch(26.4% 0.142 29.5)",
+          "oklch(37.9% 0.171 29.5)",
+          "oklch(49.3% 0.182 29.5)",
+          "oklch(60.7% 0.174 29.5)",
+          "oklch(72.1% 0.146 29.5)",
+          "oklch(83.6% 0.1 29.5)",
+          "oklch(95% 0.035 29.5)"
+        ]
+      },
+      "urgent": {
+        "role": "tertiary",
+        "displayName": "Urgent Red",
+        "canonical": "#e5484d",
+        "oklch": "oklch(62.6% 0.193 23)",
+        "tonalRamp": [
+          "oklch(15% 0.099 23)",
+          "oklch(26.4% 0.15 23)",
+          "oklch(37.9% 0.182 23)",
+          "oklch(49.3% 0.193 23)",
+          "oklch(60.7% 0.184 23)",
+          "oklch(72.1% 0.155 23)",
+          "oklch(83.6% 0.106 23)",
+          "oklch(95% 0.037 23)"
+        ]
+      },
+      "high": {
+        "role": "tertiary",
+        "displayName": "High Amber",
+        "canonical": "#f5a524",
+        "oklch": "oklch(78.2% 0.158 72.3)",
+        "tonalRamp": [
+          "oklch(15% 0.081 72.3)",
+          "oklch(26.4% 0.123 72.3)",
+          "oklch(37.9% 0.149 72.3)",
+          "oklch(49.3% 0.158 72.3)",
+          "oklch(60.7% 0.151 72.3)",
+          "oklch(72.1% 0.127 72.3)",
+          "oklch(83.6% 0.087 72.3)",
+          "oklch(95% 0.03 72.3)"
+        ]
+      },
+      "normal": {
+        "role": "tertiary",
+        "displayName": "Normal Indigo",
+        "canonical": "#4f46e5",
+        "oklch": "oklch(51.1% 0.23 277)",
+        "tonalRamp": [
+          "oklch(15% 0.117 277)",
+          "oklch(26.4% 0.179 277)",
+          "oklch(37.9% 0.216 277)",
+          "oklch(49.3% 0.23 277)",
+          "oklch(60.7% 0.219 277)",
+          "oklch(72.1% 0.185 277)",
+          "oklch(83.6% 0.126 277)",
+          "oklch(95% 0.044 277)"
+        ]
+      },
+      "low": {
+        "role": "tertiary",
+        "displayName": "Low Slate",
+        "canonical": "#8b93a7",
+        "oklch": "oklch(66.3% 0.031 268.2)",
+        "tonalRamp": [
+          "oklch(15% 0.016 268.2)",
+          "oklch(26.4% 0.024 268.2)",
+          "oklch(37.9% 0.029 268.2)",
+          "oklch(49.3% 0.031 268.2)",
+          "oklch(60.7% 0.03 268.2)",
+          "oklch(72.1% 0.025 268.2)",
+          "oklch(83.6% 0.017 268.2)",
+          "oklch(95% 0.006 268.2)"
+        ]
+      },
+      "note": {
+        "role": "secondary",
+        "displayName": "Sticky Note Yellow",
+        "canonical": "#ffe066",
+        "oklch": "oklch(91% 0.144 95.1)",
+        "tonalRamp": [
+          "oklch(15% 0.073 95.1)",
+          "oklch(26.4% 0.112 95.1)",
+          "oklch(37.9% 0.136 95.1)",
+          "oklch(49.3% 0.144 95.1)",
+          "oklch(60.7% 0.137 95.1)",
+          "oklch(72.1% 0.116 95.1)",
+          "oklch(83.6% 0.079 95.1)",
+          "oklch(95% 0.027 95.1)"
+        ]
+      },
+      "note-ink": {
+        "role": "secondary",
+        "displayName": "Note Ink",
+        "canonical": "#3d3300",
+        "oklch": "oklch(32.2% 0.066 97.1)",
+        "tonalRamp": [
+          "oklch(15% 0.034 97.1)",
+          "oklch(26.4% 0.052 97.1)",
+          "oklch(37.9% 0.063 97.1)",
+          "oklch(49.3% 0.066 97.1)",
+          "oklch(60.7% 0.063 97.1)",
+          "oklch(72.1% 0.053 97.1)",
+          "oklch(83.6% 0.036 97.1)",
+          "oklch(95% 0.013 97.1)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The page headline only, one sentence per line."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Inbox list headings, followed by a muted tabular count."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Form card heading and the product name in the top bar."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Message text, the lede (max 46ch) and inputs."
+      },
+      "body-small": {
+        "displayName": "Body small",
+        "purpose": "Suggestions, analysis area, draft text and status lines."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Form labels, disclosure summaries, card tags, counter and privacy note."
+      },
+      "note-label": {
+        "displayName": "Note label",
+        "purpose": "Only the uppercase caution line on the draft sticky note."
+      }
+    },
+    "shadows": [
+      {
+        "name": "contact",
+        "value": "0 1px 2px rgb(27 31 59 / 0.05)",
+        "purpose": "The form panel at rest."
+      },
+      {
+        "name": "lift",
+        "value": "0 12px 28px -12px rgb(27 31 59 / 0.28)",
+        "purpose": "The message card whose analysis is open; nothing else."
+      },
+      {
+        "name": "stick",
+        "value": "0 10px 18px -8px rgb(61 51 0 / 0.35)",
+        "purpose": "First keyframe of the draft note settling animation only."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "Card lift, disclosure chevrons and the note settling."
+      },
+      {
+        "name": "control-transition",
+        "value": "0.15s ease",
+        "purpose": "Border, fill and colour changes on controls."
+      },
+      {
+        "name": "card-lift",
+        "value": "0.3s",
+        "purpose": "Shadow and border change when a card opens."
+      },
+      {
+        "name": "chevron-rotate",
+        "value": "0.2s",
+        "purpose": "Disclosure chevron rotation."
+      },
+      {
+        "name": "stick",
+        "value": "0.45s",
+        "purpose": "Draft note drops 6px onto the card; removed under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "single-column",
+        "value": "820px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The one submit action; stays readable when disabled to show the countdown.",
+      "html": "<button class=\"ds-btn-primary\">Clasificar mensaje</button> <button class=\"ds-btn-primary\" disabled>Esperá 12 s</button>",
+      "css": ".ds-btn-primary { min-height: 48px; padding: 12px 20px; border: none; border-radius: 10px; background: #4f46e5; color: #fff; font: 700 16px/1.5 \"Figtree Variable\", system-ui, sans-serif; font-variant-numeric: tabular-nums; cursor: pointer; transition: background-color 0.15s ease; } .ds-btn-primary:hover:not(:disabled) { background: #4338ca; } .ds-btn-primary:active:not(:disabled) { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; } .ds-btn-primary:disabled { background: #eeedff; color: #3730a3; cursor: not-allowed; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Retry after a load error.",
+      "html": "<button class=\"ds-btn-secondary\">Reintentar</button>",
+      "css": ".ds-btn-secondary { padding: 8px 16px; border: 1px solid #878da8; border-radius: 10px; background: #fff; color: #1b1f3b; font: 700 16px/1.5 \"Figtree Variable\", system-ui, sans-serif; cursor: pointer; } .ds-btn-secondary:hover { border-color: #4f46e5; color: #3730a3; } .ds-btn-secondary:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Inputs, select and textarea share one field style.",
+      "html": "<label class=\"ds-label\">Mensaje<textarea class=\"ds-input\" rows=\"3\" placeholder=\"Ej.: Hola, quiero sacar un turno...\"></textarea></label>",
+      "css": ".ds-label { display: flex; flex-direction: column; gap: 8px; font: 700 13px/1.5 \"Figtree Variable\", system-ui, sans-serif; color: #1b1f3b; } .ds-input { width: 100%; padding: 10px 12px; border: 1px solid #878da8; border-radius: 10px; background: #fff; color: #1b1f3b; font: 400 16px/1.5 \"Figtree Variable\", system-ui, sans-serif; transition: border-color 0.15s ease; } .ds-input::placeholder { color: #5f6584; } .ds-input:hover { border-color: #4a5072; } .ds-input:focus-visible { border-color: #4f46e5; outline: 2px solid #4f46e5; outline-offset: 0; }"
+    },
+    {
+      "name": "Suggestion",
+      "kind": "chip",
+      "refersTo": "suggestion",
+      "description": "One-line sample message; a click fills the textarea.",
+      "html": "<button class=\"ds-suggestion\">Tengo turno mañana a las 9 pero me surgió un viaje, ¿lo puedo pasar?</button>",
+      "css": ".ds-suggestion { width: 100%; max-width: 360px; padding: 8px 12px; border: 1px solid #e1e5ee; border-radius: 10px; background: transparent; color: #4a5072; font: 400 14px/1.5 \"Figtree Variable\", system-ui, sans-serif; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; cursor: pointer; transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease; } .ds-suggestion:hover { border-color: #4f46e5; background: #eeedff; color: #3730a3; } .ds-suggestion:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; }"
+    },
+    {
+      "name": "Needs-human Chip",
+      "kind": "chip",
+      "refersTo": "human-chip",
+      "description": "Neutral flag that a person must handle the message.",
+      "html": "<span class=\"ds-human\">Requiere humano</span>",
+      "css": ".ds-human { display: inline-block; padding: 1px 8px; border: 1px solid #878da8; border-radius: 6px; color: #1b1f3b; font: 700 13px/1.5 \"Figtree Variable\", system-ui, sans-serif; }"
+    },
+    {
+      "name": "Top Bar",
+      "kind": "nav",
+      "refersTo": "topbar",
+      "description": "Dark band with the product name only.",
+      "html": "<header class=\"ds-topbar\"><p class=\"ds-brand\">AI Inbox <span>Triage</span></p></header>",
+      "css": ".ds-topbar { display: flex; align-items: center; min-height: 56px; padding: 0 24px; background: #1b1f3b; color: #fff; } .ds-brand { margin: 0; font: 800 18px/1.2 \"Figtree Variable\", system-ui, sans-serif; letter-spacing: -0.01em; } .ds-brand span { color: #b4b0ff; }"
+    },
+    {
+      "name": "Message Card with Priority Flag",
+      "kind": "card",
+      "refersTo": "message-card",
+      "description": "A pinned message; the flag tab on the left edge is the priority, the only colour in the inbox.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-flag\" style=\"background:#f5a524\"></span><p class=\"ds-tags\"><b>Alta</b><span>· Reprogramar turno</span><span class=\"ds-human\">Requiere humano</span></p><p class=\"ds-text\">Tengo turno mañana a las 9 pero me surgió un viaje.</p><p class=\"ds-meta\">Anónimo · 22/11/26, 4:19 p. m.</p></article>",
+      "css": ".ds-card { position: relative; max-width: 520px; margin-left: 8px; padding: 16px 20px 16px 28px; background: #fff; border: 1px solid #e1e5ee; border-radius: 12px; font-family: \"Figtree Variable\", system-ui, sans-serif; color: #1b1f3b; transition: box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1); } .ds-card:hover { border-color: transparent; box-shadow: 0 12px 28px -12px rgb(27 31 59 / 0.28); } .ds-flag { position: absolute; left: -6px; top: 14px; width: 12px; height: 28px; border-radius: 3px; background: #8b93a7; } .ds-tags { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; font-size: 13px; color: #4a5072; } .ds-tags b { font-weight: 800; color: #1b1f3b; } .ds-human { padding: 1px 8px; border: 1px solid #878da8; border-radius: 6px; color: #1b1f3b; font-weight: 700; } .ds-text { margin: 6px 0 0; font-size: 16px; line-height: 1.5; } .ds-meta { margin: 4px 0 0; font-size: 13px; color: #5f6584; }"
+    },
+    {
+      "name": "Draft Sticky Note",
+      "kind": "custom",
+      "refersTo": "draft-note",
+      "description": "The AI draft as a sticky note to review, never a sent reply.",
+      "html": "<div class=\"ds-note\"><div class=\"ds-note-head\"><span class=\"ds-note-label\">Borrador: revisar antes de enviar</span><button class=\"ds-link\">Copiar</button></div><p>Hola. Entendemos que necesites reprogramar tu turno. Por favor indicanos qué día te resultaría conveniente.</p></div>",
+      "css": ".ds-note { max-width: 360px; padding: 12px 16px 16px; border-radius: 4px 4px 4px 16px; background: #ffe066; color: #3d3300; font: 400 14px/1.55 \"Figtree Variable\", system-ui, sans-serif; animation: ds-stick 0.45s cubic-bezier(0.16, 1, 0.3, 1); } .ds-note p { margin: 4px 0 0; } .ds-note-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; column-gap: 8px; } .ds-note-label { font-size: 12px; font-weight: 800; letter-spacing: 0.03em; text-transform: uppercase; white-space: nowrap; } .ds-link { min-height: 32px; padding: 0 4px; border: none; background: none; color: #3730a3; font: 700 14px \"Figtree Variable\", system-ui, sans-serif; cursor: pointer; } .ds-link:hover { text-decoration: underline; text-underline-offset: 0.2em; } .ds-link:focus-visible { outline: 2px solid #4f46e5; outline-offset: 2px; } @keyframes ds-stick { from { transform: translateY(-6px) scale(0.98); box-shadow: 0 10px 18px -8px rgb(61 51 0 / 0.35); } } @media (prefers-reduced-motion: reduce) { .ds-note { animation: none; } }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Notice Board",
+    "overview": "An office wall of index cards and sticky notes, rendered on a cool, bright screen. Each incoming message is a white card pinned to a pale blue-grey ground, with a coloured index flag sticking out of its left edge that says how urgent it is. When the AI has drafted a reply, the draft is a flat yellow sticky note left on that card: something a person picks up and reviews, never a reply that was already sent. The sticky note and the index flag are the system's two signature devices, and everything around them stays quiet so they read first.\n\nDensity is calm and legible rather than compact. A single heavy sans (Figtree at weight 800 for headings) does the hierarchy through strong size and weight contrast against small bold labels; there is no second typeface. Colour is rationed: one indigo for actions and links, a fixed four-colour priority set for the flags, and the note yellow. Everything else is ink, grey, and white. The world refuses the generic three-pane SaaS inbox and the chatbot transcript; the build has no sidebar, no chat bubbles, and no avatars.\n\nLight only. The root declares `color-scheme: light` on purpose: the bright, high-contrast board is the identity, and there is no dark theme.",
+    "keyCharacteristics": [
+      "Cool white cards on a pale blue-grey ground, under a dark indigo-black top bar.",
+      "Priority shown as an index flag tab on the card edge, and only there.",
+      "The AI draft is a yellow sticky note with one rounded \"curled\" corner.",
+      "One typeface, Figtree Variable, with heavy 800-weight headings and 700-weight labels.",
+      "Flat surfaces; a soft lift shadow appears only on the card whose analysis is open."
+    ],
+    "rules": [
+      {
+        "name": "The Colour Is Priority Rule",
+        "body": "Inside the inbox, colour carries one meaning: priority, shown on the flag. Category tags and the \"Requiere humano\" chip stay neutral ink and grey. New inbox signals get a neutral treatment or a shape, never a new hue.",
+        "section": "colors"
+      },
+      {
+        "name": "The One Yellow Rule",
+        "body": "Sticky Note Yellow belongs only to AI drafts awaiting review. Don't use it for highlights, warnings or callouts.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight Ladder Rule",
+        "body": "Hierarchy steps through 800 headings, 700 labels, 600 values and 400 text. Don't add a second typeface or decorative styles to create emphasis.",
+        "section": "typography"
+      },
+      {
+        "name": "The Lift Means Open Rule",
+        "body": "A card lifts only while its analysis is open. Resting cards stay flat with a hairline border.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Curled Corner Rule",
+        "body": "Only the draft note gets the asymmetric corner; every other surface keeps uniform radii.",
+        "section": "shapes"
+      }
+    ],
+    "dos": [
+      "Do show priority with the index flag on the card edge, in exactly the four priority colours.",
+      "Do render every AI draft as the yellow sticky note with the curled corner, labelled as a draft to review.",
+      "Do keep category tags and the \"Requiere humano\" chip neutral (ink, ink-2, Strong Line).",
+      "Do keep a disabled primary button readable (Indigo Wash with Indigo Ink) when it carries a countdown.",
+      "Do reserve the Lift shadow for the card whose analysis is open.",
+      "Do use the 10px radius for every control and the 4px spacing steps, favouring 8px multiples.",
+      "Do keep motion short and eased with `cubic-bezier(0.16, 1, 0.3, 1)`, and drop the note's animation under reduced motion."
+    ],
+    "donts": [
+      "Don't use colour for anything else in the inbox: categories, statuses and flags beyond priority get no hue.",
+      "Don't use Sticky Note Yellow outside AI drafts, and don't use Alert Red for a priority flag.",
+      "Don't build the three-pane SaaS inbox (sidebar, list, reading pane) or a chatbot transcript with bubbles and avatars.",
+      "Don't add a second typeface or a dark theme; the system is light only.",
+      "Don't put resting shadows on message cards."
+    ]
+  }
+}

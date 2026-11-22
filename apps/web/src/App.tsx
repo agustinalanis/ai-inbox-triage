@@ -56,6 +56,14 @@ function App() {
           <p className="brand">
             AI Inbox <span>Triage</span>
           </p>
+          <nav className="topbar-links" aria-label="Sobre el proyecto">
+            <a href="https://github.com/agustinalanis/ai-inbox-triage">
+              Código
+            </a>
+            <a href="https://agusdev-portfolio.vercel.app/proyectos/ai-inbox-triage">
+              Caso de estudio
+            </a>
+          </nav>
         </div>
       </header>
       <div className="app">

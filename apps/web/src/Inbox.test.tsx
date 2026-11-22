@@ -151,3 +151,57 @@ describe('Inbox', () => {
     expect(screen.getByRole('button', { name: 'Copiar' })).toBeTruthy();
   });
 });
+
+describe('Inbox, after the visitor sends a message', () => {
+  // jsdom does not implement scrolling.
+  const scrollIntoView = vi.fn();
+
+  afterEach(() => {
+    scrollIntoView.mockClear();
+    Reflect.deleteProperty(Element.prototype, 'scrollIntoView');
+  });
+
+  const renderWithLatest = (messages: Message[], latestId: string | null) => {
+    Element.prototype.scrollIntoView = scrollIntoView;
+    render(
+      <Inbox
+        business={business}
+        messages={messages}
+        loading={false}
+        error={null}
+        latestId={latestId}
+      />,
+    );
+  };
+
+  it('brings only the new message into view', () => {
+    renderWithLatest(
+      [{ ...message, id: 'm2', text: 'Mensaje nuevo' }, message],
+      'm2',
+    );
+
+    expect(scrollIntoView).toHaveBeenCalledTimes(1);
+    expect(scrollIntoView.mock.contexts[0]).toHaveProperty(
+      'textContent',
+      expect.stringContaining('Mensaje nuevo'),
+    );
+    expect(scrollIntoView).toHaveBeenCalledWith({
+      block: 'nearest',
+      behavior: 'smooth',
+    });
+  });
+
+  it('does not scroll when the latest id is not in the inbox', () => {
+    renderWithLatest([message], 'stale-id');
+    expect(scrollIntoView).not.toHaveBeenCalled();
+  });
+
+  it('jumps without animation when the visitor prefers reduced motion', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
+    renderWithLatest([message], 'm1');
+    expect(scrollIntoView).toHaveBeenCalledWith({
+      block: 'nearest',
+      behavior: 'auto',
+    });
+  });
+});

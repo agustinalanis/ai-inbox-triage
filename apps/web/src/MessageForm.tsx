@@ -117,33 +117,38 @@ export function MessageForm({
         ))}
       </select>
 
-      <div className="form-row">
-        <div>
-          <label htmlFor={`${id}-name`}>
-            Nombre <span className="optional">(opcional)</span>
-          </label>
-          <input
-            id={`${id}-name`}
-            value={senderName}
-            maxLength={100}
-            autoComplete="off"
-            onChange={(event) => setSenderName(event.target.value)}
-          />
+      <details className="sender">
+        <summary>
+          Agregar nombre y email <span className="optional">(opcional)</span>
+        </summary>
+        <div className="form-row">
+          <div>
+            <label htmlFor={`${id}-name`}>
+              Nombre <span className="optional">(opcional)</span>
+            </label>
+            <input
+              id={`${id}-name`}
+              value={senderName}
+              maxLength={100}
+              autoComplete="off"
+              onChange={(event) => setSenderName(event.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor={`${id}-email`}>
+              Email <span className="optional">(opcional)</span>
+            </label>
+            <input
+              id={`${id}-email`}
+              type="email"
+              value={senderEmail}
+              maxLength={254}
+              autoComplete="off"
+              onChange={(event) => setSenderEmail(event.target.value)}
+            />
+          </div>
         </div>
-        <div>
-          <label htmlFor={`${id}-email`}>
-            Email <span className="optional">(opcional)</span>
-          </label>
-          <input
-            id={`${id}-email`}
-            type="email"
-            value={senderEmail}
-            maxLength={254}
-            autoComplete="off"
-            onChange={(event) => setSenderEmail(event.target.value)}
-          />
-        </div>
-      </div>
+      </details>
 
       {suggestions.length > 0 && (
         <div className="suggestions">
@@ -169,7 +174,7 @@ export function MessageForm({
       <textarea
         ref={textRef}
         id={`${id}-text`}
-        rows={6}
+        rows={3}
         value={text}
         placeholder="Ej.: Hola, quiero sacar un turno para el martes a la mañana. Tengo OSDE."
         aria-invalid={tooLong}
@@ -184,7 +189,8 @@ export function MessageForm({
       </p>
       {tooLong && (
         <p className="form-error" role="alert">
-          El mensaje supera los {MAX_MESSAGE_LENGTH} caracteres.
+          El mensaje supera los {MAX_MESSAGE_LENGTH} caracteres. Acortalo para
+          poder clasificarlo.
         </p>
       )}
 

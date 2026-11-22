@@ -20,6 +20,7 @@ function App() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [latestId, setLatestId] = useState<string | null>(null);
 
   useEffect(() => {
     getBusinesses()
@@ -49,51 +50,68 @@ function App() {
   const business = businesses.find((candidate) => candidate.id === businessId);
 
   return (
-    <div className="app">
-      <header className="app-header">
-        <h1>AI Inbox Triage</h1>
-        <p className="muted">
-          Escribí como si fueras un cliente. La IA clasifica el mensaje, le
-          asigna prioridad y prepara un borrador de respuesta para el equipo.
-        </p>
+    <>
+      <header className="topbar">
+        <div className="topbar-inner">
+          <p className="brand">
+            AI Inbox <span>Triage</span>
+          </p>
+        </div>
       </header>
-      <main className="layout">
-        {businessId ? (
-          <MessageForm
-            businesses={businesses}
-            businessId={businessId}
-            onBusinessChange={(id) => {
-              setMessages([]);
-              setLoading(true);
-              setError(null);
-              setBusinessId(id);
-            }}
-            onCreated={(message) =>
-              setMessages((list) => sortInbox([message, ...list]))
-            }
-          />
-        ) : (
-          <section className="panel">
-            {error ? (
-              <div role="alert">
-                <p className="form-error">{error}</p>
-                <RetryButton />
-              </div>
+      <div className="app">
+        <main className="layout">
+          <div className="compose">
+            <div className="intro">
+              <h1>
+                <span>Escribí como un cliente.</span>{' '}
+                <span>La IA ordena el resto.</span>
+              </h1>
+              <p>
+                Clasifica el mensaje, le asigna prioridad, extrae los datos y
+                deja un borrador de respuesta para que lo revise el equipo.
+              </p>
+            </div>
+            {businessId ? (
+              <MessageForm
+                businesses={businesses}
+                businessId={businessId}
+                onBusinessChange={(id) => {
+                  setMessages([]);
+                  setLoading(true);
+                  setError(null);
+                  setLatestId(null);
+                  setBusinessId(id);
+                }}
+                onCreated={(message) => {
+                  setMessages((list) => sortInbox([message, ...list]));
+                  setLatestId(message.id);
+                }}
+              />
             ) : (
-              <p className="muted">Cargando…</p>
+              <section className="panel">
+                {error ? (
+                  <div role="alert">
+                    <p className="form-error">{error}</p>
+                    <RetryButton />
+                  </div>
+                ) : (
+                  <p className="muted">Cargando…</p>
+                )}
+              </section>
             )}
-          </section>
-        )}
-        {businessId && (
-          <Inbox
-            business={business}
-            messages={messages}
-            loading={loading}
-            error={error}
-          />
-        )}
-      </main>
-    </div>
+          </div>
+          {businessId && (
+            <Inbox
+              business={business}
+              messages={messages}
+              loading={loading}
+              error={error}
+              latestId={latestId}
+            />
+          )}
+        </main>
+      </div>
+    </>
   );
 }
 

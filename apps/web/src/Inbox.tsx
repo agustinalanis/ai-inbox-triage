@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import type { Business, Message, Priority } from './api.ts';
 
 const PRIORITY_LABELS: Record<Priority, string> = {
@@ -18,9 +18,17 @@ interface Props {
   messages: Message[];
   loading: boolean;
   error: string | null;
+  /** The message the visitor just sent, brought into view when it lands. */
+  latestId?: string | null;
 }
 
-export function Inbox({ business, messages, loading, error }: Readonly<Props>) {
+export function Inbox({
+  business,
+  messages,
+  loading,
+  error,
+  latestId = null,
+}: Readonly<Props>) {
   const mine = messages.filter((message) => !message.isExample);
   const examples = messages.filter((message) => message.isExample);
 
@@ -44,7 +52,12 @@ export function Inbox({ business, messages, loading, error }: Readonly<Props>) {
       )}
       {!loading && !error && (
         <>
-          <MessageList title="Mis mensajes" business={business} messages={mine}>
+          <MessageList
+            title="Mis mensajes"
+            business={business}
+            messages={mine}
+            latestId={latestId}
+          >
             <p className="muted empty">
               Todavía no enviaste mensajes. Escribí uno o probá con una
               sugerencia.
@@ -67,11 +80,13 @@ function MessageList({
   title,
   business,
   messages,
+  latestId = null,
   children,
 }: Readonly<{
   title: string;
   business: Business | undefined;
   messages: Message[];
+  latestId?: string | null;
   children?: ReactNode;
 }>) {
   const headingId = `inbox-${title.toLowerCase().replaceAll(' ', '-')}`;
@@ -86,7 +101,11 @@ function MessageList({
         <ol aria-live="polite">
           {messages.map((message) => (
             <li key={message.id}>
-              <MessageCard message={message} business={business} />
+              <MessageCard
+                message={message}
+                business={business}
+                latest={message.id === latestId}
+              />
             </li>
           ))}
         </ol>
@@ -98,7 +117,27 @@ function MessageList({
 function MessageCard({
   message,
   business,
-}: Readonly<{ message: Message; business: Business | undefined }>) {
+  latest,
+}: Readonly<{
+  message: Message;
+  business: Business | undefined;
+  latest: boolean;
+}>) {
+  const ref = useRef<HTMLElement>(null);
+
+  // On a phone the inbox sits below the form, so a sent message would land out of sight.
+  // Focus stays on the form: the list's aria-live region already announces the new card.
+  useEffect(() => {
+    if (!latest) return;
+    const reduceMotion = globalThis.matchMedia?.(
+      '(prefers-reduced-motion: reduce)',
+    ).matches;
+    ref.current?.scrollIntoView({
+      block: 'nearest',
+      behavior: reduceMotion ? 'auto' : 'smooth',
+    });
+  }, [latest]);
+
   const category = business?.categories.find(
     (candidate) => candidate.id === message.category,
   );
@@ -112,7 +151,8 @@ function MessageCard({
   const hasAnalysis = extracted.length > 0 || message.suggestedReply !== null;
 
   return (
-    <article className="card">
+    <article className="card" ref={ref}>
+      <span className={`flag flag-${message.priority}`} aria-hidden="true" />
       <p className="card-tags">
         <span className={`priority priority-${message.priority}`}>
           {PRIORITY_LABELS[message.priority]}
@@ -132,19 +172,21 @@ function MessageCard({
       {hasAnalysis && (
         <details className="analysis">
           <summary>Ver análisis</summary>
-          {extracted.length > 0 && (
-            <dl className="extracted">
-              {extracted.map(({ key, label, value }) => (
-                <div key={key}>
-                  <dt>{label}</dt>
-                  <dd>{value}</dd>
-                </div>
-              ))}
-            </dl>
-          )}
-          {message.suggestedReply && (
-            <DraftReply text={message.suggestedReply} />
-          )}
+          <div className="analysis-body">
+            {extracted.length > 0 && (
+              <dl className="extracted">
+                {extracted.map(({ key, label, value }) => (
+                  <div key={key}>
+                    <dt>{label}</dt>
+                    <dd>{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {message.suggestedReply && (
+              <DraftReply text={message.suggestedReply} />
+            )}
+          </div>
         </details>
       )}
     </article>

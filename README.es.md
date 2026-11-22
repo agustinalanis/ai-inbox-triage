@@ -1,6 +1,7 @@
 <h1 align="center">📥 AI Inbox Triage — Triage con IA para la bandeja de un negocio chico</h1>
 
 <p align="center">
+  <a href="https://ai-inbox-triage.pages.dev"><img src="https://img.shields.io/badge/Demo-En_línea-2EA043?style=for-the-badge" alt="Demo en línea"/></a>
   <a href="https://github.com/agustinalanis/ai-inbox-triage/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/agustinalanis/ai-inbox-triage/ci.yml?branch=main&label=CI&style=for-the-badge" alt="CI"/></a>
   <img src="https://img.shields.io/badge/Rol-Desarrollador_único-30363D?style=for-the-badge" alt="Desarrollador único"/>
   <img src="https://img.shields.io/badge/Tipo-Demo_de_IA-2EA043?style=for-the-badge" alt="Demo de IA"/>
@@ -24,7 +25,7 @@ project: AI Inbox Triage — LLM-based triage of incoming messages for small bus
 author: Agustín Alanís (github.com/agustinalanis)
 role: Sole developer — product, prompt and eval design, backend, frontend, database
 timeline: November 2026
-status: Feature complete locally; public deploy pending
+status: Live demo at https://ai-inbox-triage.pages.dev (Cloudflare Pages, Render, Neon); the free-tier API sleeps when idle, so the first request can take about a minute
 code_visibility: Public (this repository)
 
 stack:
